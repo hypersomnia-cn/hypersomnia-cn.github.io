@@ -38,5 +38,20 @@
     "title": "Page not found",
     "description": "The requested page does not exist.",
     "home": "Back to home"
+  },
+  "content": {
+    "toc": "On this page",
+    "backlinks": "Referenced by",
+    "authors": "Authors",
+    "references": "References",
+    "updated": "Updated",
+    "wiki": "Wiki",
+    "primaryReference": "Primary reference",
+    "published": "Published",
+    "empty": "No published content yet.",
+    "otherCollection": "Browse the Chinese collection",
+    "blog": "Blog",
+    "backReference": "Back to content",
+    "missingTranslation": "This article has no Chinese translation"
   }
 }

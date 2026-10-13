@@ -2,22 +2,45 @@
 import { useTranslations } from 'next-intl';
 import { LocaleLink, useLanguage } from './language';
 import { Button } from './ui/button';
+import Link from 'next/link';
 export function Header() {
-  const { lang, setLang } = useLanguage();
+  const { lang, setLang, translationMissing, otherCollection } = useLanguage();
   const t = useTranslations('site');
+  const content = useTranslations('content');
   return (
     <header className="site-header">
       <LocaleLink href="/" className="brand">
         {t('name')}
       </LocaleLink>
-      <Button
-        variant="outline"
-        className="language-button"
-        onClick={() => setLang(lang === 'zh' ? 'en' : 'zh')}
-        aria-label={t('switchLanguage')}
-      >
-        {t('otherLanguage')}
-      </Button>
+      <nav className="header-nav" aria-label={lang === 'zh' ? '网站导航' : 'Site navigation'}>
+        <LocaleLink href="/wiki/">{content('wiki')}</LocaleLink>
+        <LocaleLink href="/blog/">{content('blog')}</LocaleLink>
+      </nav>
+      <div className="language-control">
+        <Button
+          variant="outline"
+          className="language-button"
+          onClick={() => setLang(lang === 'zh' ? 'en' : 'zh')}
+          aria-label={t('switchLanguage')}
+          disabled={translationMissing}
+        >
+          {t('otherLanguage')}
+        </Button>
+        {translationMissing && (
+          <p className="translation-notice">
+            {content('missingTranslation')}
+            {otherCollection && (
+              <>
+                {' '}
+                ·{' '}
+                <Link href={otherCollection} prefetch={false}>
+                  {content('otherCollection')}
+                </Link>
+              </>
+            )}
+          </p>
+        )}
+      </div>
     </header>
   );
 }

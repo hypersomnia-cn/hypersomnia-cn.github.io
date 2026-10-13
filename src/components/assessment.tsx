@@ -6,10 +6,21 @@ import { score, validateAnswers } from '@/lib/scoring';
 import { LocaleLink, useLanguage } from './language';
 import { useAssessmentForm } from './use-assessment-form';
 import { Button } from './ui/button';
-export function Assessment({ scale }: { scale: Scale }) {
+import Link from 'next/link';
+import type { ReactNode } from 'react';
+export function Assessment({
+  scale,
+  backlinks = [],
+  description,
+}: {
+  scale: Scale;
+  backlinks?: { key: string; title: string; route: string; locale: string }[];
+  description?: ReactNode;
+}) {
   const { lang } = useLanguage();
   const t = useTranslations('assessment');
   const tSite = useTranslations('site');
+  const tContent = useTranslations('content');
   const format = useFormatter();
   const { form, result, errors, setResult, setErrors } = useAssessmentForm(scale, lang);
   const { register, watch, reset } = form;
@@ -104,7 +115,7 @@ export function Assessment({ scale }: { scale: Scale }) {
       </LocaleLink>
       <section className="assessment-heading">
         <h1>{scale.title[lang]}</h1>
-        <p>{scale.description[lang]}</p>
+        <p className="scale-description">{description ?? scale.description[lang]}</p>
         <div className="assessment-meta">
           <span>{tSite('estimatedTime', { value: scale.duration[lang] })}</span>
           <span>{tSite('recallPeriod', { value: scale.recall[lang] })}</span>
@@ -239,6 +250,21 @@ export function Assessment({ scale }: { scale: Scale }) {
           ))}
         </ul>
       </aside>
+      {backlinks.length > 0 && (
+        <aside className="content-backlinks">
+          <h2>{tContent('backlinks')}</h2>
+          <ul>
+            {backlinks.map((page) => (
+              <li key={page.key}>
+                <Link href={page.route} prefetch={false}>
+                  {page.title}
+                  {page.locale !== lang ? ` (${page.locale === 'zh' ? '中文' : 'English'})` : ''}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )}
     </main>
   );
 }

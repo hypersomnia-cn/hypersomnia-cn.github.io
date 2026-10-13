@@ -38,5 +38,20 @@
     "title": "页面未找到",
     "description": "请求的页面不存在。",
     "home": "返回首页"
+  },
+  "content": {
+    "toc": "文章目录",
+    "backlinks": "引用此页",
+    "authors": "作者",
+    "references": "参考文献",
+    "updated": "更新于",
+    "wiki": "知识库",
+    "primaryReference": "主要参考来源",
+    "published": "发布于",
+    "empty": "暂无已发布内容。",
+    "otherCollection": "查看英文栏目",
+    "blog": "博客",
+    "backReference": "返回正文",
+    "missingTranslation": "本文暂无英文版本"
   }
 }

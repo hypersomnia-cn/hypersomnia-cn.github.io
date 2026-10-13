@@ -196,7 +196,9 @@ export const scaleSchema = z
       }
     }
   });
-export type Scale = z.infer<typeof scaleSchema>;
+export type Scale = z.infer<typeof scaleSchema> & {
+  descriptionMarkdown?: { zh: string; en: string };
+};
 export type Question = Scale['sections'][number]['questions'][number];
 export type Language = 'zh' | 'en';
 export type Answers = Record<string, string | number | null | undefined>;

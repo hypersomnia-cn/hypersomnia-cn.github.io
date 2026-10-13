@@ -2,7 +2,14 @@
 import { useTranslations } from 'next-intl';
 import { LocaleLink, useLanguage } from './language';
 import type { ScaleSummary } from '@/lib/schema';
-export function Home({ scales }: { scales: ScaleSummary[] }) {
+import type { ReactNode } from 'react';
+export function Home({
+  scales,
+  descriptions,
+}: {
+  scales: ScaleSummary[];
+  descriptions: Record<string, ReactNode>;
+}) {
   const { lang } = useLanguage();
   const t = useTranslations('site');
   return (
@@ -20,7 +27,7 @@ export function Home({ scales }: { scales: ScaleSummary[] }) {
                   {t('scaleTitle', { name: s.title[lang], abbreviation: s.abbreviation })}
                 </LocaleLink>
               </h2>
-              <p className="card-description">{s.description[lang]}</p>
+              <p className="card-description">{descriptions[s.id] ?? s.description[lang]}</p>
               <div className="card-meta">
                 <span>{t('estimatedTime', { value: s.duration[lang] })}</span>
                 <span>{t('items', { count: s.itemCount })}</span>

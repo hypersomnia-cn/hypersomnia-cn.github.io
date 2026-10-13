@@ -6,6 +6,17 @@ import { basePath, localizedPath, publicPath } from '../src/i18n/paths';
 import { readScale, readScaleSummaries, readScales } from '../src/lib/content';
 import { scaleIds } from '../src/lib/scale-contracts';
 import { absoluteUrl, pageMetadata } from '../src/lib/site';
+import { getContentIndex, contentPageMetadata } from '../src/lib/markdown';
+
+const contentIndex = getContentIndex();
+const validRoutes = new Set(contentIndex.pages.map((page) => page.route));
+for (const locale of locales) {
+  for (const kind of ['wiki', 'blog'])
+    assert(
+      !fs.existsSync(path.resolve('out', locale, kind, '__empty__')),
+      'Build placeholder must not be published',
+    );
+}
 
 const root = path.resolve('out');
 const decode = (value: string) =>
@@ -45,15 +56,80 @@ function checkLinks(html: string) {
     if (!href?.startsWith('/')) continue;
     assert(href.startsWith(`${basePath}/`), `Incorrect link base path: ${href}`);
     const logical = href.slice(basePath.length).split(/[?#]/)[0];
-    assert(
-      logical === '/' || /^\/(zh|en)\/(?:scales\/(ihss|ess|fss|psqi)\/)?$/.test(logical),
-      `Invalid internal link: ${href}`,
-    );
+    assert(logical === '/' || validRoutes.has(logical), `Invalid internal link: ${href}`);
     assert(fs.existsSync(path.join(root, logical, 'index.html')), `Missing linked page: ${href}`);
   }
 }
 const sitemap = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
-assert.equal([...sitemap.matchAll(/<loc>/g)].length, 10, 'Sitemap must contain ten pages');
+assert.equal(
+  [...sitemap.matchAll(/<loc>/g)].length,
+  contentIndex.pages.length,
+  'Sitemap must contain every published page',
+);
+for (const target of contentIndex.pages.filter(
+  (page) =>
+    page.identity.startsWith('wiki:') ||
+    page.identity.startsWith('blog:') ||
+    ['page:wiki', 'page:blog'].includes(page.identity),
+)) {
+  const html = fs.readFileSync(path.join(root, target.route, 'index.html'), 'utf8');
+  const document = contentIndex.documents.find((item) => item.target.key === target.key);
+  const expected = contentPageMetadata(target, document?.metadata.description, contentIndex);
+  assert.equal(tags(html, 'html')[0]?.lang, localeTags[target.locale], target.route);
+  assert.equal(
+    decode(html.match(/<title>([\s\S]*?)<\/title>/)?.[1] ?? ''),
+    expected.title,
+    target.route,
+  );
+  assert.equal(
+    tags(html, 'meta').find((tag) => tag.name === 'description')?.content,
+    expected.description,
+    target.route,
+  );
+  assert.equal(
+    tags(html, 'link').find((tag) => tag.rel === 'canonical')?.href,
+    absoluteUrl(target.route),
+    target.route,
+  );
+  const alternates = tags(html, 'link').filter((tag) => tag.rel === 'alternate');
+  const versions = contentIndex.translations.get(target.identity) ?? [];
+  assert.equal(
+    alternates.length,
+    versions.length,
+    `${target.route}: unexpected translation alternates`,
+  );
+  for (const version of versions)
+    assert(
+      alternates.some(
+        (tag) =>
+          tag.hreflang === localeTags[version.locale] && tag.href === absoluteUrl(version.route),
+      ),
+    );
+  const markup = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, '');
+  assert.equal([...markup.matchAll(/<h1\b/g)].length, 1, `${target.route}: exactly one H1`);
+  assert.equal(decode(markup.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1] ?? ''), target.title);
+  assert(sitemap.includes(`<loc>${absoluteUrl(target.route)}</loc>`));
+  const ids = tags(markup, '[a-z][\\w-]*')
+    .map((tag) => tag.id)
+    .filter(Boolean);
+  assert.equal(new Set(ids).size, ids.length, `${target.route}: duplicate element IDs`);
+  for (const { href } of tags(markup, 'a')) {
+    if (!href?.includes('#')) continue;
+    const [url, fragment] = href.split('#');
+    if (url && !url.startsWith('/')) continue;
+    const destination = url
+      ? fs.readFileSync(
+          path.join(root, url.slice(basePath.length).split('?')[0], 'index.html'),
+          'utf8',
+        )
+      : markup;
+    assert(
+      tags(destination, '[a-z][\\w-]*').some((tag) => tag.id === decodeURIComponent(fragment)),
+      `${target.route}: missing anchor ${href}`,
+    );
+  }
+  checkLinks(html);
+}
 for (const locale of locales) {
   for (const id of [null, ...scaleIds]) {
     const route = localizedPath(locale, id ? `/scales/${id}/` : '/');
@@ -123,7 +199,7 @@ for (const file of ['index.html', '404.html']) {
     );
 }
 console.log(
-  `Validated ten localized pages, sitemap, entry and 404 for ${basePath || '/'} (${absoluteUrl('/')})`,
+  `Validated ${contentIndex.pages.length} localized pages, sitemap, entry and 404 for ${basePath || '/'} (${absoluteUrl('/')})`,
 );
 console.log(
   JSON.stringify({
