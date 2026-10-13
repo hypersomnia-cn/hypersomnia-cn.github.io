@@ -22,9 +22,16 @@ jobs:
         id: pages
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
-      - run: pnpm build
+      - run: pnpm format:check
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Build and verify the deployment artifact
+        run: |
+          pnpm build
+          pnpm validate:static
+          pnpm test:e2e
         env:
           NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          SITE_ORIGIN: ${{ steps.pages.outputs.origin }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out

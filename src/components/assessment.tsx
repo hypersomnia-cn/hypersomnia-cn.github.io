@@ -1,21 +1,19 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect, useRef } from 'react';
 import { useFormatter, useTranslations } from 'next-intl';
-import type { Answers, AssessmentResult, Question, Scale } from '@/lib/schema';
-import { score, validateAnswers, type ValidationCode } from '@/lib/scoring';
-import { LocaleLink, PageMetadata, useLanguage } from './language';
+import type { Question, Scale } from '@/lib/schema';
+import { score, validateAnswers } from '@/lib/scoring';
+import { LocaleLink, useLanguage } from './language';
+import { useAssessmentForm } from './use-assessment-form';
 import { Button } from './ui/button';
 export function Assessment({ scale }: { scale: Scale }) {
   const { lang } = useLanguage();
   const t = useTranslations('assessment');
   const tSite = useTranslations('site');
   const format = useFormatter();
-  const form = useForm<Answers>({ defaultValues: {}, shouldUnregister: false });
+  const { form, result, errors, setResult, setErrors } = useAssessmentForm(scale, lang);
   const { register, watch, reset } = form;
   const answers = watch();
-  const [result, setResult] = useState<AssessmentResult | null>(null);
-  const [errors, setErrors] = useState<Record<string, ValidationCode>>({});
   const resultRef = useRef<HTMLElement>(null);
   const questions = scale.sections.flatMap((s) => s.questions);
   const mandatory = questions.filter((q) => q.required);
@@ -101,7 +99,6 @@ export function Assessment({ scale }: { scale: Scale }) {
   const band = result ? scale.bands.find((b) => b.id === result.interpretationId)! : null;
   return (
     <main id="main" className="assessment-main">
-      <PageMetadata title={scale.title[lang]} description={scale.description[lang]} />
       <LocaleLink href="/" className="back-link">
         {t('all')}
       </LocaleLink>

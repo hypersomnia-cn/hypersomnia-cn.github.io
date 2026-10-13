@@ -5,6 +5,17 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: root
+            base_path: ''
+          - target: subpath
+            base_path: '/webside'
+    env:
+      NEXT_PUBLIC_BASE_PATH: ${{ matrix.base_path }}
+      SITE_ORIGIN: https://example.test
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -16,9 +27,10 @@ jobs:
       - run: pnpm check
       - run: pnpm format:check
       - run: pnpm build
+      - run: pnpm validate:static
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test:e2e
       - uses: actions/upload-artifact@v4
         with:
-          name: static-site
+          name: static-site-${{ matrix.target }}
           path: out

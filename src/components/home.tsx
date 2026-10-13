@@ -1,13 +1,12 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import { LocaleLink, PageMetadata, useLanguage } from './language';
-import type { Scale } from '@/lib/schema';
-export function Home({ scales }: { scales: Scale[] }) {
+import { LocaleLink, useLanguage } from './language';
+import type { ScaleSummary } from '@/lib/schema';
+export function Home({ scales }: { scales: ScaleSummary[] }) {
   const { lang } = useLanguage();
   const t = useTranslations('site');
   return (
     <main id="main" className="home-main">
-      <PageMetadata />
       <section className="home-heading">
         <h1>{t('title')}</h1>
         <p>{t('description')}</p>
@@ -26,7 +25,7 @@ export function Home({ scales }: { scales: Scale[] }) {
                 <span>{t('estimatedTime', { value: s.duration[lang] })}</span>
                 <span>{t('items', { count: s.itemCount })}</span>
               </div>
-              <a className="card-source" href={s.sources[0].url} target="_blank" rel="noreferrer">
+              <a className="card-source" href={s.source.url} target="_blank" rel="noreferrer">
                 {t('referenceSource')}
                 <span aria-hidden="true"> ↗</span>
               </a>

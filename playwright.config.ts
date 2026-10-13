@@ -4,6 +4,8 @@ export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
   workers: 2,
+  timeout: 30000,
+  globalTimeout: 180000,
   use: {
     baseURL: `http://127.0.0.1:4173${base}/`,
     channel: process.env.PLAYWRIGHT_CHANNEL,
@@ -21,9 +23,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'pnpm preview',
+    command: 'node scripts/serve.mjs',
     url: `http://127.0.0.1:4173${base}/`,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
   },
   reporter: 'list',
 });

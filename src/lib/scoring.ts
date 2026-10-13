@@ -43,8 +43,18 @@ export function score(scale: Scale, answers: Answers): AssessmentResult {
     throw new Error(`Invalid answers: ${Object.keys(errors).join(', ')}`);
   const questions = scale.sections.flatMap((s) => s.questions);
   const value = (id: string) => {
-    const q = questions.find((q) => q.id === id)!;
-    return q.options?.find((o) => o.id === String(answers[id]))?.score ?? 0;
+    const q = questions.find((q) => q.id === id);
+    if (!q || q.type !== 'choice') throw new Error(`Invalid choice contract: ${id}`);
+    const raw = answers[id];
+    if (
+      scale.id === 'psqi' &&
+      id === 'q5j' &&
+      (raw == null || (typeof raw === 'string' && !raw.trim()))
+    )
+      return 0;
+    const option = q.options?.find((o) => o.id === String(raw));
+    if (!option) throw new Error(`Invalid choice answer: ${id}`);
+    return option.score;
   };
   let total = 0;
   let mean: number | undefined;

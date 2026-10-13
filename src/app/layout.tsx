@@ -1,17 +1,5 @@
-import { LanguageProvider, SkipLink } from '@/components/language';
-import { Header, Footer } from '@/components/shell';
-import './globals.css';
+// Keep the root shared across locales so changing language does not reload the document.
+// The locale and entry layouts provide the statically rendered html/body elements.
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="zh-CN">
-      <body>
-        <LanguageProvider>
-          <SkipLink />
-          <Header />
-          {children}
-          <Footer />
-        </LanguageProvider>
-      </body>
-    </html>
-  );
+  return children;
 }

@@ -1,8 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { parse } from 'yaml';
-import { scaleSchema, type Scale } from './schema';
-export const scaleIds = ['ihss', 'ess', 'fss', 'psqi'] as const;
+import { scaleSchema, type Scale, type ScaleSummary } from './schema';
+import { scaleIds } from './scale-contracts';
+export { scaleIds } from './scale-contracts';
 export function readScale(id: string): Scale {
   if (!(scaleIds as readonly string[]).includes(id)) throw new Error(`Unknown scale: ${id}`);
   const file = path.join(process.cwd(), 'content', 'scales', `${id}.yaml`);
@@ -22,4 +23,17 @@ export function readScale(id: string): Scale {
 }
 export function readScales() {
   return scaleIds.map(readScale);
+}
+export function readScaleSummaries(): ScaleSummary[] {
+  return readScales().map(
+    ({ id, abbreviation, title, description, duration, itemCount, sources }) => ({
+      id,
+      abbreviation,
+      title,
+      description,
+      duration,
+      itemCount,
+      source: sources[0],
+    }),
+  );
 }

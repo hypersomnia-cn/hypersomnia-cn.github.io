@@ -1,59 +1,52 @@
 'use client';
 import Link from 'next/link';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { createContext, useContext, useEffect } from 'react';
 import { NextIntlClientProvider, useTranslations } from 'next-intl';
 import type { Language } from '@/lib/schema';
-import { isLocale, localeTags, messages } from '@/i18n/messages';
-const Context = createContext<{ lang: Language; setLang: (lang: Language) => void }>({
-  lang: 'zh',
-  setLang: () => {},
-});
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [lang, updateLang] = useState<Language>('zh');
+import type { messages } from '@/i18n/messages';
+import { localeTags } from '@/i18n/messages';
+import { localizedPath, withoutBasePath, scaleFromPath } from '@/i18n/paths';
+import { activateAssessmentRoute } from '@/lib/assessment-draft';
+const Context = createContext<Language>('zh');
+export function LanguageProvider({
+  children,
+  lang,
+  messages: localeMessages,
+}: {
+  children: React.ReactNode;
+  lang: Language;
+  messages: (typeof messages)[Language];
+}) {
+  const pathname = usePathname();
   useEffect(() => {
-    const readLocale = () => {
-      const candidate = new URL(window.location.href).searchParams.get('lang');
-      updateLang(isLocale(candidate) ? candidate : 'zh');
-    };
-    readLocale();
-    window.addEventListener('popstate', readLocale);
-    return () => window.removeEventListener('popstate', readLocale);
-  }, []);
-  const setLang = (locale: Language) => {
-    const url = new URL(window.location.href);
-    url.searchParams.set('lang', locale);
-    window.history.replaceState(window.history.state, '', url);
-    updateLang(locale);
-  };
-  useEffect(() => {
+    activateAssessmentRoute(scaleFromPath(pathname));
     document.documentElement.lang = localeTags[lang];
-  }, [lang]);
+  }, [pathname, lang]);
   return (
-    <Context.Provider value={{ lang, setLang }}>
-      <NextIntlClientProvider locale={lang} messages={messages[lang]} timeZone="UTC">
+    <Context.Provider value={lang}>
+      <NextIntlClientProvider locale={lang} messages={localeMessages} timeZone="UTC">
         {children}
       </NextIntlClientProvider>
     </Context.Provider>
   );
 }
-export const useLanguage = () => useContext(Context);
+export function useLanguage() {
+  const lang = useContext(Context);
+  const pathname = usePathname();
+  const router = useRouter();
+  const setLang = (next: Language) => {
+    const path = withoutBasePath(pathname).replace(/^\/(zh|en)(?=\/|$)/, '') || '/';
+    router.push(localizedPath(next, path), { scroll: false });
+  };
+  return { lang, setLang };
+}
 export function LocaleLink({
   href,
   ...props
 }: Omit<React.ComponentProps<typeof Link>, 'href'> & { href: string }) {
   const { lang } = useLanguage();
-  const [path, hash] = href.split('#');
-  const localized = `${path}${path.includes('?') ? '&' : '?'}lang=${lang}${hash ? `#${hash}` : ''}`;
-  return <Link href={localized} {...props} />;
-}
-export function PageMetadata({ title, description }: { title?: string; description?: string }) {
-  const t = useTranslations('site');
-  return (
-    <>
-      <title>{title ? `${title} | ${t('name')}` : t('title')}</title>
-      <meta name="description" content={description ?? t('description')} />
-    </>
-  );
+  return <Link href={localizedPath(lang, href)} {...props} prefetch={false} />;
 }
 export function SkipLink() {
   const t = useTranslations('site');
