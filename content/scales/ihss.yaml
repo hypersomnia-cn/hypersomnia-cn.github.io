@@ -1,0 +1,433 @@
+contentVersion: 1.1.0
+scoringVersion: 1.0.0
+disclaimer:
+  zh: 自评结果仅供理解症状和就诊沟通参考，不能单独确诊或排除特发性嗜睡症及其他疾病。
+  en: Self-assessment supports understanding and clinical discussion. It cannot diagnose or rule out idiopathic hypersomnia or other conditions.
+id: ihss
+itemCount: 14
+abbreviation: IHSS
+title:
+  zh: 特发性睡眠增多严重程度量表
+  en: Idiopathic Hypersomnia Severity Scale
+description:
+  zh: 用于评估特发性睡眠增多相关症状的频率、严重程度及功能影响，涵盖夜间睡眠时长、醒后睡眠惯性、日间嗜睡，以及认知、情绪和日常活动受限。
+  en: Assesses the frequency, severity and functional impact of idiopathic hypersomnia symptoms, including nighttime sleep duration, sleep inertia, daytime sleepiness, and effects on cognition, mood and daily activities.
+instructions:
+  zh: 请根据过去一个月的症状选择最符合的答案。此量表评估症状负担，不用于自行诊断。
+  en: Answer for your symptoms over the past month. This assesses symptom burden rather than providing a diagnosis.
+recall:
+  zh: 过去一个月
+  en: Past month
+duration:
+  zh: 约 5 分钟
+  en: About 5 minutes
+sourceVersion: IHSS 2018; month-recall form Rev1122
+calculator: sum
+range:
+  - 0
+  - 50
+scoreLabel:
+  zh: 总分
+  en: Total score
+interpretationNote:
+  zh: 严重度区间来自 2022 年 IH 患者研究，描述症状负担，不表示患病概率。
+  en: Severity bands come from a 2022 study of people with IH. They describe symptom burden, not the probability of having IH.
+sources:
+  - title:
+      zh: IHSS 原版量表
+      en: IHSS assessment form
+    url: https://www.hypersomniafoundation.org/document/idiopathic-hypersomnia-severity-scale-ihss/
+  - title:
+      zh: Rassu 等，2022
+      en: Rassu et al., 2022
+    url: https://pmc.ncbi.nlm.nih.gov/articles/PMC8805002/
+sections:
+  - id: night
+    title:
+      zh: 夜间睡眠与醒来
+      en: Nighttime sleep and waking
+    questions:
+      - id: q1
+        label:
+          zh: 不受作息限制时，您理想的夜间睡眠时长是？
+          en: How much nighttime sleep feels ideal when your schedule is unrestricted?
+        type: choice
+        required: true
+        options:
+          - id: '0'
+            label:
+              zh: 少于 7 小时
+              en: Under 7 hours
+            score: 0
+          - id: '1'
+            label:
+              zh: 7–9 小时
+              en: 7–9 hours
+            score: 1
+          - id: '2'
+            label:
+              zh: 超过 9 小时但少于 11 小时
+              en: Over 9 but under 11 hours
+            score: 2
+          - id: '3'
+            label:
+              zh: 11 小时或以上
+              en: 11 hours or more
+            score: 3
+      - id: q2
+        label:
+          zh: 必须按时起床时，您会觉得睡眠不足吗？
+          en: Do you feel underslept when you must rise at a fixed time?
+        type: choice
+        required: true
+        options: &a1
+          - id: '0'
+            label:
+              zh: 从不
+              en: Never
+            score: 0
+          - id: '1'
+            label:
+              zh: 有时
+              en: Sometimes
+            score: 1
+          - id: '2'
+            label:
+              zh: 经常
+              en: Often
+            score: 2
+          - id: '3'
+            label:
+              zh: 总是
+              en: Always
+            score: 3
+      - id: q3
+        label:
+          zh: 早晨是否极难醒来，需要多次闹铃或他人帮助？
+          en: Is waking extremely difficult without repeated alarms or help?
+        type: choice
+        required: true
+        options:
+          - id: '0'
+            label:
+              zh: 从不
+              en: Never
+            score: 0
+          - id: '1'
+            label:
+              zh: 很少（每周一次）
+              en: Once weekly
+            score: 1
+          - id: '2'
+            label:
+              zh: 有时（每周 2–3 次）
+              en: 2–3 times weekly
+            score: 2
+          - id: '3'
+            label:
+              zh: 经常（每周 4–5 次）
+              en: 4–5 times weekly
+            score: 3
+          - id: '4'
+            label:
+              zh: 非常频繁（每周 6–7 次）
+              en: 6–7 times weekly
+            score: 4
+      - id: q4
+        label:
+          zh: 起床后多久，您的身体和思维才能正常运作？
+          en: How long after rising until you function fully?
+        type: choice
+        required: true
+        options:
+          - id: '0'
+            label:
+              zh: 醒来就能正常运作
+              en: Immediately
+            score: 0
+          - id: '1'
+            label:
+              zh: 少于 30 分钟
+              en: Under 30 minutes
+            score: 1
+          - id: '2'
+            label:
+              zh: 30 分钟至 1 小时
+              en: 30 minutes to 1 hour
+            score: 2
+          - id: '3'
+            label:
+              zh: 超过 1 小时但少于 2 小时
+              en: Over 1 but under 2 hours
+            score: 3
+          - id: '4'
+            label:
+              zh: 2 小时或以上
+              en: 2 hours or more
+            score: 4
+      - id: q5
+        label:
+          zh: 刚醒来时，您会有不合理言行或明显笨拙，例如绊倒、掉东西吗？
+          en: Soon after waking, do you act irrationally or become very clumsy?
+        type: choice
+        required: true
+        options: *a1
+  - id: day
+    title:
+      zh: 白天睡眠与嗜睡
+      en: Daytime sleep and sleepiness
+    questions:
+      - id: q6
+        label:
+          zh: 白天条件允许时，您会小睡吗？
+          en: Do you nap when circumstances allow?
+        type: choice
+        required: true
+        options: *a1
+      - id: q7
+        label:
+          zh: 您理想的白天小睡总时长是？多次小睡请合计。
+          en: What total daytime nap duration feels ideal?
+        type: choice
+        required: true
+        options:
+          - id: '0'
+            label:
+              zh: 不小睡
+              en: No naps
+            score: 0
+          - id: '1'
+            label:
+              zh: 少于 1 小时
+              en: Under 1 hour
+            score: 1
+          - id: '2'
+            label:
+              zh: 超过 1 小时但少于 2 小时
+              en: Over 1 but under 2 hours
+            score: 2
+          - id: '3'
+            label:
+              zh: 2 小时或以上
+              en: 2 hours or more
+            score: 3
+        help:
+          zh: 原表在恰好 1 小时处没有明确归属；请选择最符合通常情况的选项。
+          en: The source does not explicitly assign exactly one hour; choose the option closest to your usual experience.
+      - id: q8
+        label:
+          zh: 通常小睡后，您感觉如何？
+          en: How alert do you usually feel after a nap?
+        type: choice
+        required: true
+        options:
+          - id: '0'
+            label:
+              zh: 非常清醒
+              en: Fully alert
+            score: 0
+          - id: '1'
+            label:
+              zh: 清醒
+              en: Alert
+            score: 1
+          - id: '2'
+            label:
+              zh: 困倦
+              en: Sleepy
+            score: 2
+          - id: '3'
+            label:
+              zh: 非常困倦
+              en: Very sleepy
+            score: 3
+      - id: q9
+        label:
+          zh: 从事不太刺激的活动时，您会难以保持清醒吗？
+          en: Do you struggle to stay awake during unstimulating activities?
+        type: choice
+        required: true
+        options:
+          - id: '0'
+            label:
+              zh: 从不
+              en: Never
+            score: 0
+          - id: '1'
+            label:
+              zh: 很少（每周一次或更少）
+              en: Once weekly or less
+            score: 1
+          - id: '2'
+            label:
+              zh: 有时（每周 2–3 次）
+              en: 2–3 times weekly
+            score: 2
+          - id: '3'
+            label:
+              zh: 经常（每周 4–7 次）
+              en: 4–7 times weekly
+            score: 3
+          - id: '4'
+            label:
+              zh: 非常频繁（每天至少两次）
+              en: At least twice daily
+            score: 4
+  - id: impact
+    title:
+      zh: 日常功能影响
+      en: Impact on everyday life
+    questions:
+      - id: q10
+        label:
+          zh: 嗜睡对总体健康和精力的影响有多大？
+          en: How much does hypersomnolence affect your health and energy?
+        type: choice
+        required: true
+        options: &a2
+          - id: '0'
+            label:
+              zh: 没有影响
+              en: None
+            score: 0
+          - id: '1'
+            label:
+              zh: 轻微
+              en: Minor
+            score: 1
+          - id: '2'
+            label:
+              zh: 中等
+              en: Moderate
+            score: 2
+          - id: '3'
+            label:
+              zh: 明显
+              en: Significant
+            score: 3
+          - id: '4'
+            label:
+              zh: 非常明显
+              en: Very significant
+            score: 4
+      - id: q11
+        label:
+          zh: 嗜睡对注意力、记忆和思维表现的影响有多大？
+          en: How much does it affect concentration, memory and thinking?
+        type: choice
+        required: true
+        options: *a2
+      - id: q12
+        label:
+          zh: 嗜睡对情绪的影响有多大，例如悲伤、焦虑或易怒？
+          en: How much does it affect mood, such as sadness, anxiety or irritability?
+        type: choice
+        required: true
+        options:
+          - id: '0'
+            label:
+              zh: 没有
+              en: None
+            score: 0
+          - id: '1'
+            label:
+              zh: 轻微
+              en: Minor
+            score: 1
+          - id: '2'
+            label:
+              zh: 中等
+              en: Moderate
+            score: 2
+          - id: '3'
+            label:
+              zh: 严重
+              en: Severe
+            score: 3
+          - id: '4'
+            label:
+              zh: 非常严重
+              en: Very severe
+            score: 4
+      - id: q13
+        label:
+          zh: 嗜睡妨碍您完成家庭、学习、休闲或工作任务的程度如何？
+          en: How much does it interfere with family, school, leisure or work tasks?
+        type: choice
+        required: true
+        options: *a2
+      - id: q14
+        label:
+          zh: 嗜睡对驾驶汽车造成多大困扰？
+          en: How much of a problem is hypersomnolence for driving?
+        type: choice
+        required: true
+        options:
+          - id: '0'
+            label:
+              zh: 没有困扰／不驾驶
+              en: No problem / I do not drive
+            score: 0
+          - id: '1'
+            label:
+              zh: 轻微
+              en: Minor
+            score: 1
+          - id: '2'
+            label:
+              zh: 中等
+              en: Moderate
+            score: 2
+          - id: '3'
+            label:
+              zh: 明显
+              en: Significant
+            score: 3
+          - id: '4'
+            label:
+              zh: 非常明显
+              en: Very significant
+            score: 4
+bands:
+  - id: mild
+    min: 0
+    max: 12
+    title:
+      zh: 轻度症状负担
+      en: Mild symptom burden
+    explanation:
+      zh: 本次评分处于研究提出的轻度区间。
+      en: Your score falls in the proposed mild symptom range.
+    advice: &a3
+      zh: 若症状持续或影响学习、工作及日常生活，建议记录睡眠与症状，并与睡眠医学专业人员讨论。
+      en: If symptoms persist or affect daily life, record your sleep and symptoms and discuss them with a sleep clinician.
+  - id: moderate
+    min: 13
+    max: 25
+    title:
+      zh: 中度症状负担
+      en: Moderate symptom burden
+    explanation:
+      zh: 本次评分处于研究提出的中度区间。
+      en: Your score falls in the proposed moderate symptom range.
+    advice: *a3
+  - id: severe
+    min: 26
+    max: 38
+    title:
+      zh: 重度症状负担
+      en: Severe symptom burden
+    explanation:
+      zh: 本次评分处于研究提出的重度区间。
+      en: Your score falls in the proposed severe symptom range.
+    advice: *a3
+  - id: very_severe
+    min: 39
+    max: 50
+    title:
+      zh: 非常重度症状负担
+      en: Very severe symptom burden
+    explanation:
+      zh: 本次评分处于研究提出的非常重度区间。
+      en: Your score falls in the proposed very severe symptom range.
+    advice: *a3

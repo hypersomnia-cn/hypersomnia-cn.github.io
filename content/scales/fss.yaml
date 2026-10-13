@@ -1,0 +1,443 @@
+contentVersion: 1.1.0
+scoringVersion: 1.0.0
+disclaimer:
+  zh: 自评结果仅供理解症状和就诊沟通参考，不能单独确诊或排除特发性嗜睡症及其他疾病。
+  en: Self-assessment supports understanding and clinical discussion. It cannot diagnose or rule out idiopathic hypersomnia or other conditions.
+id: fss
+itemCount: 9
+totalRange:
+  - 9
+  - 63
+abbreviation: FSS
+title:
+  zh: 疲劳严重度量表
+  en: Fatigue Severity Scale
+description:
+  zh: 通过九项自我报告，评估过去一周疲劳的严重程度及其对身体活动、工作、家庭和社交生活的影响。结果以平均分表示。
+  en: Uses nine self-reported statements to assess fatigue severity over the past week and its impact on physical activity, work, family and social life. Results are reported as a mean score.
+instructions:
+  zh: 请根据过去一周的情况，评价您对每项陈述的同意程度。1 表示完全不同意，7 表示完全同意，2–6 表示介于两者之间。
+  en: For the past week, rate agreement with each statement from 1 (strongly disagree) to 7 (strongly agree), with 2–6 in between.
+recall:
+  zh: 过去一周
+  en: Past week
+duration:
+  zh: 约 3 分钟
+  en: About 3 minutes
+sourceVersion: FSS-9, Krupp 1989
+calculator: mean
+range:
+  - 1
+  - 7
+scoreLabel:
+  zh: 平均分
+  en: Mean score
+interpretationNote:
+  zh: 平均分越高，报告的疲劳影响越大。不同疾病和人群的参考阈值不同，本页不作统一的轻中重分级。
+  en: Higher means indicate greater reported fatigue impact. Thresholds vary by condition and population, so no universal severity categories are assigned.
+sources:
+  - title:
+      zh: Valko 等：FSS 验证研究
+      en: Valko et al., FSS validation
+    url: https://pmc.ncbi.nlm.nih.gov/articles/PMC2579971/
+  - title:
+      zh: 美国胸科学会：FSS
+      en: 'American Thoracic Society: FSS'
+    url: https://www.thoracic.org/members/assemblies/assemblies/srn/questionaires/fss.php
+sections:
+  - id: fatigue
+    title:
+      zh: 疲劳与生活
+      en: Fatigue and daily life
+    questions:
+      - id: q1
+        label:
+          zh: 疲劳会降低我的积极性。
+          en: Fatigue reduces my motivation.
+        type: choice
+        required: true
+        options:
+          - id: '1'
+            label:
+              zh: 1 · 完全不同意
+              en: 1 · Strongly disagree
+            score: 1
+          - id: '2'
+            label:
+              zh: '2'
+              en: '2'
+            score: 2
+          - id: '3'
+            label:
+              zh: '3'
+              en: '3'
+            score: 3
+          - id: '4'
+            label:
+              zh: '4'
+              en: '4'
+            score: 4
+          - id: '5'
+            label:
+              zh: '5'
+              en: '5'
+            score: 5
+          - id: '6'
+            label:
+              zh: '6'
+              en: '6'
+            score: 6
+          - id: '7'
+            label:
+              zh: 7 · 完全同意
+              en: 7 · Strongly agree
+            score: 7
+      - id: q2
+        label:
+          zh: 运动会让我疲劳。
+          en: Exercise brings on fatigue.
+        type: choice
+        required: true
+        options:
+          - id: '1'
+            label:
+              zh: 1 · 完全不同意
+              en: 1 · Strongly disagree
+            score: 1
+          - id: '2'
+            label:
+              zh: '2'
+              en: '2'
+            score: 2
+          - id: '3'
+            label:
+              zh: '3'
+              en: '3'
+            score: 3
+          - id: '4'
+            label:
+              zh: '4'
+              en: '4'
+            score: 4
+          - id: '5'
+            label:
+              zh: '5'
+              en: '5'
+            score: 5
+          - id: '6'
+            label:
+              zh: '6'
+              en: '6'
+            score: 6
+          - id: '7'
+            label:
+              zh: 7 · 完全同意
+              en: 7 · Strongly agree
+            score: 7
+      - id: q3
+        label:
+          zh: 我容易疲劳。
+          en: I tire easily.
+        type: choice
+        required: true
+        options:
+          - id: '1'
+            label:
+              zh: 1 · 完全不同意
+              en: 1 · Strongly disagree
+            score: 1
+          - id: '2'
+            label:
+              zh: '2'
+              en: '2'
+            score: 2
+          - id: '3'
+            label:
+              zh: '3'
+              en: '3'
+            score: 3
+          - id: '4'
+            label:
+              zh: '4'
+              en: '4'
+            score: 4
+          - id: '5'
+            label:
+              zh: '5'
+              en: '5'
+            score: 5
+          - id: '6'
+            label:
+              zh: '6'
+              en: '6'
+            score: 6
+          - id: '7'
+            label:
+              zh: 7 · 完全同意
+              en: 7 · Strongly agree
+            score: 7
+      - id: q4
+        label:
+          zh: 疲劳妨碍我的身体活动能力。
+          en: Fatigue limits my physical functioning.
+        type: choice
+        required: true
+        options:
+          - id: '1'
+            label:
+              zh: 1 · 完全不同意
+              en: 1 · Strongly disagree
+            score: 1
+          - id: '2'
+            label:
+              zh: '2'
+              en: '2'
+            score: 2
+          - id: '3'
+            label:
+              zh: '3'
+              en: '3'
+            score: 3
+          - id: '4'
+            label:
+              zh: '4'
+              en: '4'
+            score: 4
+          - id: '5'
+            label:
+              zh: '5'
+              en: '5'
+            score: 5
+          - id: '6'
+            label:
+              zh: '6'
+              en: '6'
+            score: 6
+          - id: '7'
+            label:
+              zh: 7 · 完全同意
+              en: 7 · Strongly agree
+            score: 7
+      - id: q5
+        label:
+          zh: 疲劳经常给我带来问题。
+          en: Fatigue often causes problems for me.
+        type: choice
+        required: true
+        options:
+          - id: '1'
+            label:
+              zh: 1 · 完全不同意
+              en: 1 · Strongly disagree
+            score: 1
+          - id: '2'
+            label:
+              zh: '2'
+              en: '2'
+            score: 2
+          - id: '3'
+            label:
+              zh: '3'
+              en: '3'
+            score: 3
+          - id: '4'
+            label:
+              zh: '4'
+              en: '4'
+            score: 4
+          - id: '5'
+            label:
+              zh: '5'
+              en: '5'
+            score: 5
+          - id: '6'
+            label:
+              zh: '6'
+              en: '6'
+            score: 6
+          - id: '7'
+            label:
+              zh: 7 · 完全同意
+              en: 7 · Strongly agree
+            score: 7
+      - id: q6
+        label:
+          zh: 疲劳让我难以持续进行身体活动。
+          en: Fatigue makes sustained physical activity difficult.
+        type: choice
+        required: true
+        options:
+          - id: '1'
+            label:
+              zh: 1 · 完全不同意
+              en: 1 · Strongly disagree
+            score: 1
+          - id: '2'
+            label:
+              zh: '2'
+              en: '2'
+            score: 2
+          - id: '3'
+            label:
+              zh: '3'
+              en: '3'
+            score: 3
+          - id: '4'
+            label:
+              zh: '4'
+              en: '4'
+            score: 4
+          - id: '5'
+            label:
+              zh: '5'
+              en: '5'
+            score: 5
+          - id: '6'
+            label:
+              zh: '6'
+              en: '6'
+            score: 6
+          - id: '7'
+            label:
+              zh: 7 · 完全同意
+              en: 7 · Strongly agree
+            score: 7
+      - id: q7
+        label:
+          zh: 疲劳妨碍我履行某些职责。
+          en: Fatigue interferes with my responsibilities.
+        type: choice
+        required: true
+        options:
+          - id: '1'
+            label:
+              zh: 1 · 完全不同意
+              en: 1 · Strongly disagree
+            score: 1
+          - id: '2'
+            label:
+              zh: '2'
+              en: '2'
+            score: 2
+          - id: '3'
+            label:
+              zh: '3'
+              en: '3'
+            score: 3
+          - id: '4'
+            label:
+              zh: '4'
+              en: '4'
+            score: 4
+          - id: '5'
+            label:
+              zh: '5'
+              en: '5'
+            score: 5
+          - id: '6'
+            label:
+              zh: '6'
+              en: '6'
+            score: 6
+          - id: '7'
+            label:
+              zh: 7 · 完全同意
+              en: 7 · Strongly agree
+            score: 7
+      - id: q8
+        label:
+          zh: 疲劳是我最困扰的三个症状之一。
+          en: Fatigue is among my three most disabling symptoms.
+        type: choice
+        required: true
+        options:
+          - id: '1'
+            label:
+              zh: 1 · 完全不同意
+              en: 1 · Strongly disagree
+            score: 1
+          - id: '2'
+            label:
+              zh: '2'
+              en: '2'
+            score: 2
+          - id: '3'
+            label:
+              zh: '3'
+              en: '3'
+            score: 3
+          - id: '4'
+            label:
+              zh: '4'
+              en: '4'
+            score: 4
+          - id: '5'
+            label:
+              zh: '5'
+              en: '5'
+            score: 5
+          - id: '6'
+            label:
+              zh: '6'
+              en: '6'
+            score: 6
+          - id: '7'
+            label:
+              zh: 7 · 完全同意
+              en: 7 · Strongly agree
+            score: 7
+      - id: q9
+        label:
+          zh: 疲劳妨碍我的工作、家庭或社交生活。
+          en: Fatigue disrupts my work, family or social life.
+        type: choice
+        required: true
+        options:
+          - id: '1'
+            label:
+              zh: 1 · 完全不同意
+              en: 1 · Strongly disagree
+            score: 1
+          - id: '2'
+            label:
+              zh: '2'
+              en: '2'
+            score: 2
+          - id: '3'
+            label:
+              zh: '3'
+              en: '3'
+            score: 3
+          - id: '4'
+            label:
+              zh: '4'
+              en: '4'
+            score: 4
+          - id: '5'
+            label:
+              zh: '5'
+              en: '5'
+            score: 5
+          - id: '6'
+            label:
+              zh: '6'
+              en: '6'
+            score: 6
+          - id: '7'
+            label:
+              zh: 7 · 完全同意
+              en: 7 · Strongly agree
+            score: 7
+bands:
+  - id: continuous
+    min: 1
+    max: 7
+    title:
+      zh: 疲劳影响的连续评分
+      en: Continuous fatigue impact score
+    explanation:
+      zh: 请结合具体题目和日常功能理解得分；此分数不能判断疲劳的原因。
+      en: Consider individual responses and everyday functioning. This score does not determine the cause of fatigue.
+    advice:
+      zh: 若症状持续或影响学习、工作及日常生活，建议记录睡眠与症状，并与睡眠医学专业人员讨论。
+      en: If symptoms persist or affect daily life, record your sleep and symptoms and discuss them with a sleep clinician.

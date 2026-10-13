@@ -1,0 +1,314 @@
+contentVersion: 1.1.0
+scoringVersion: 1.0.0
+disclaimer:
+  zh: 自评结果仅供理解症状和就诊沟通参考，不能单独确诊或排除特发性嗜睡症及其他疾病。
+  en: Self-assessment supports understanding and clinical discussion. It cannot diagnose or rule out idiopathic hypersomnia or other conditions.
+id: ess
+itemCount: 8
+abbreviation: ESS
+title:
+  zh: Epworth 嗜睡量表
+  en: Epworth Sleepiness Scale
+description:
+  zh: 通过八种日常情境中打瞌睡或入睡的可能性，评估成人日间嗜睡程度。评分反映通常的入睡倾向，区别于主观疲劳感。
+  en: Assesses adult daytime sleepiness through the likelihood of dozing in eight everyday situations. Scores reflect usual sleep propensity rather than subjective fatigue.
+instructions:
+  zh: 请根据近期通常的情况，选择在以下情境中打瞌睡或睡着的可能性，而不是疲劳感。即使近期未经历某种情境，也请估计自己会如何。
+  en: Estimate your usual recent likelihood of dozing in each situation, rather than tiredness. For unfamiliar situations, estimate how you would respond.
+recall:
+  zh: 近期通常情况
+  en: Usual recent experience
+duration:
+  zh: 约 2–3 分钟
+  en: About 2–3 minutes
+sourceVersion: ESS adult 1997
+calculator: sum
+range:
+  - 0
+  - 24
+scoreLabel:
+  zh: 总分
+  en: Total score
+interpretationNote:
+  zh: 区间依据 ESS 官方成人评分解释。低分不排除睡眠疾病；是否需要评估也取决于症状及生活影响。
+  en: Ranges follow official adult ESS guidance. Low scores do not rule out sleep conditions; symptoms and their impact also matter.
+sources:
+  - title:
+      zh: ESS 官方说明
+      en: ESS official guidance
+    url: https://epworthsleepinessscale.com/about-the-ess/
+sections:
+  - id: daily
+    title:
+      zh: 日常情境
+      en: Everyday situations
+    questions:
+      - id: q1
+        label:
+          zh: 坐着阅读
+          en: Reading while seated
+        type: choice
+        required: true
+        options:
+          - id: '0'
+            label:
+              zh: 不会打瞌睡
+              en: No chance
+            score: 0
+          - id: '1'
+            label:
+              zh: 可能性小
+              en: Slight chance
+            score: 1
+          - id: '2'
+            label:
+              zh: 可能性中等
+              en: Moderate chance
+            score: 2
+          - id: '3'
+            label:
+              zh: 可能性高
+              en: High chance
+            score: 3
+      - id: q2
+        label:
+          zh: 看电视
+          en: Watching television
+        type: choice
+        required: true
+        options:
+          - id: '0'
+            label:
+              zh: 不会打瞌睡
+              en: No chance
+            score: 0
+          - id: '1'
+            label:
+              zh: 可能性小
+              en: Slight chance
+            score: 1
+          - id: '2'
+            label:
+              zh: 可能性中等
+              en: Moderate chance
+            score: 2
+          - id: '3'
+            label:
+              zh: 可能性高
+              en: High chance
+            score: 3
+      - id: q3
+        label:
+          zh: 在公共场所安静坐着，例如剧院或会议
+          en: Sitting quietly at a public event
+        type: choice
+        required: true
+        options:
+          - id: '0'
+            label:
+              zh: 不会打瞌睡
+              en: No chance
+            score: 0
+          - id: '1'
+            label:
+              zh: 可能性小
+              en: Slight chance
+            score: 1
+          - id: '2'
+            label:
+              zh: 可能性中等
+              en: Moderate chance
+            score: 2
+          - id: '3'
+            label:
+              zh: 可能性高
+              en: High chance
+            score: 3
+      - id: q4
+        label:
+          zh: 作为乘客连续乘车一小时，中途不休息
+          en: An uninterrupted one-hour ride as a passenger
+        type: choice
+        required: true
+        options:
+          - id: '0'
+            label:
+              zh: 不会打瞌睡
+              en: No chance
+            score: 0
+          - id: '1'
+            label:
+              zh: 可能性小
+              en: Slight chance
+            score: 1
+          - id: '2'
+            label:
+              zh: 可能性中等
+              en: Moderate chance
+            score: 2
+          - id: '3'
+            label:
+              zh: 可能性高
+              en: High chance
+            score: 3
+      - id: q5
+        label:
+          zh: 条件允许时，下午躺下休息
+          en: Lying down for an afternoon rest
+        type: choice
+        required: true
+        options:
+          - id: '0'
+            label:
+              zh: 不会打瞌睡
+              en: No chance
+            score: 0
+          - id: '1'
+            label:
+              zh: 可能性小
+              en: Slight chance
+            score: 1
+          - id: '2'
+            label:
+              zh: 可能性中等
+              en: Moderate chance
+            score: 2
+          - id: '3'
+            label:
+              zh: 可能性高
+              en: High chance
+            score: 3
+      - id: q6
+        label:
+          zh: 坐着与人交谈
+          en: Having a conversation while seated
+        type: choice
+        required: true
+        options:
+          - id: '0'
+            label:
+              zh: 不会打瞌睡
+              en: No chance
+            score: 0
+          - id: '1'
+            label:
+              zh: 可能性小
+              en: Slight chance
+            score: 1
+          - id: '2'
+            label:
+              zh: 可能性中等
+              en: Moderate chance
+            score: 2
+          - id: '3'
+            label:
+              zh: 可能性高
+              en: High chance
+            score: 3
+      - id: q7
+        label:
+          zh: 午餐后安静坐着，未饮酒
+          en: Sitting quietly after a lunch without alcohol
+        type: choice
+        required: true
+        options:
+          - id: '0'
+            label:
+              zh: 不会打瞌睡
+              en: No chance
+            score: 0
+          - id: '1'
+            label:
+              zh: 可能性小
+              en: Slight chance
+            score: 1
+          - id: '2'
+            label:
+              zh: 可能性中等
+              en: Moderate chance
+            score: 2
+          - id: '3'
+            label:
+              zh: 可能性高
+              en: High chance
+            score: 3
+      - id: q8
+        label:
+          zh: 坐在车内，因交通原因停下数分钟
+          en: In a car paused in traffic for several minutes
+        type: choice
+        required: true
+        options:
+          - id: '0'
+            label:
+              zh: 不会打瞌睡
+              en: No chance
+            score: 0
+          - id: '1'
+            label:
+              zh: 可能性小
+              en: Slight chance
+            score: 1
+          - id: '2'
+            label:
+              zh: 可能性中等
+              en: Moderate chance
+            score: 2
+          - id: '3'
+            label:
+              zh: 可能性高
+              en: High chance
+            score: 3
+bands:
+  - id: lower
+    min: 0
+    max: 5
+    title:
+      zh: 正常范围内较低的日间嗜睡
+      en: Lower normal daytime sleepiness
+    explanation:
+      zh: 本次得分处于成人参考正常范围的较低部分。
+      en: Your score is in the lower part of the adult reference range.
+    advice: &a1
+      zh: 若症状持续或影响学习、工作及日常生活，建议记录睡眠与症状，并与睡眠医学专业人员讨论。
+      en: If symptoms persist or affect daily life, record your sleep and symptoms and discuss them with a sleep clinician.
+  - id: higher
+    min: 6
+    max: 10
+    title:
+      zh: 正常范围内较高的日间嗜睡
+      en: Higher normal daytime sleepiness
+    explanation:
+      zh: 本次得分仍在成人参考正常范围内。若仍有明显症状，可继续寻求评估。
+      en: Your score remains within the adult reference range. Troublesome symptoms can still warrant assessment.
+    advice: *a1
+  - id: mild
+    min: 11
+    max: 12
+    title:
+      zh: 轻度日间过度嗜睡
+      en: Mild excessive daytime sleepiness
+    explanation:
+      zh: 本次得分提示日间嗜睡倾向高于参考正常范围。
+      en: Your score suggests daytime sleepiness above the reference range.
+    advice: *a1
+  - id: moderate
+    min: 13
+    max: 15
+    title:
+      zh: 中度日间过度嗜睡
+      en: Moderate excessive daytime sleepiness
+    explanation:
+      zh: 本次得分提示较明显的日间嗜睡倾向。
+      en: Your score suggests a notable tendency toward daytime sleepiness.
+    advice: *a1
+  - id: severe
+    min: 16
+    max: 24
+    title:
+      zh: 重度日间过度嗜睡
+      en: Severe excessive daytime sleepiness
+    explanation:
+      zh: 本次得分提示较高的日间嗜睡程度，建议与专业人员讨论症状和安全影响。
+      en: Your score suggests substantial daytime sleepiness. Discuss symptoms and safety implications with a clinician.
+    advice: *a1

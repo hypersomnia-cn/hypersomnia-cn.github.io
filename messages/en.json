@@ -1,0 +1,42 @@
+{
+  "site": {
+    "name": "Adult Sleepiness Questionnaires",
+    "title": "Adult Sleepiness Questionnaires",
+    "description": "Includes the Epworth Sleepiness Scale (ESS), Idiopathic Hypersomnia Severity Scale (IHSS), Fatigue Severity Scale (FSS), and Pittsburgh Sleep Quality Index (PSQI).",
+    "skip": "Skip to content",
+    "switchLanguage": "切换为中文",
+    "otherLanguage": "简体中文",
+    "referenceStatement": "Reference statement: Questionnaire results are for self-assessment and clinical discussion only. They cannot independently diagnose or rule out idiopathic hypersomnia or other conditions.",
+    "referenceSource": "Reference source",
+    "items": "{count, plural, one {# self-rated item} other {# self-rated items}}",
+    "estimatedTime": "Estimated completion time: {value}",
+    "recallPeriod": "Assessment period: {value}",
+    "sourceOrganization": "Hypersomnia Foundation",
+    "relatedLinks": "Related links",
+    "scaleTitle": "{name} ({abbreviation})"
+  },
+  "assessment": {
+    "all": "All questionnaires",
+    "optional": "Optional",
+    "result": "Questionnaire results",
+    "total": "Total score",
+    "components": "Components",
+    "advice": "Suggestions for discussion",
+    "edit": "Edit answers",
+    "reset": "Start again",
+    "instructions": "Instructions",
+    "progress": "Progress",
+    "progressLabel": "Required questions completed",
+    "errors": "Please check these answers",
+    "viewResult": "View results",
+    "references": "References",
+    "invalid": "Please provide a valid answer.",
+    "sameTime": "Bedtime and rising time must differ.",
+    "sleepTooLong": "Sleep duration cannot exceed time in bed."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The requested page does not exist.",
+    "home": "Back to home"
+  }
+}

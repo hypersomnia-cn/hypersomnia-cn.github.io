@@ -1,0 +1,42 @@
+{
+  "site": {
+    "name": "成人嗜睡量表",
+    "title": "成人嗜睡量表",
+    "description": "包含 Epworth 嗜睡量表（ESS）、特发性睡眠增多严重程度量表（IHSS）、疲劳严重度量表（FSS）和匹兹堡睡眠质量指数（PSQI）。",
+    "skip": "跳至内容",
+    "switchLanguage": "Switch to English",
+    "otherLanguage": "English",
+    "referenceStatement": "参考声明：量表结果仅供自评和就诊沟通参考，不能单独用于诊断或排除特发性睡眠增多及其他疾病。",
+    "referenceSource": "参考来源",
+    "items": "{count} 项自评",
+    "estimatedTime": "预估填写时间：{value}",
+    "recallPeriod": "评估时间范围：{value}",
+    "sourceOrganization": "Hypersomnia Foundation",
+    "relatedLinks": "相关链接",
+    "scaleTitle": "{name}（{abbreviation}）"
+  },
+  "assessment": {
+    "all": "全部量表",
+    "optional": "可选",
+    "result": "量表结果",
+    "total": "总分",
+    "components": "组成部分",
+    "advice": "参考建议",
+    "edit": "修改答案",
+    "reset": "重新填写",
+    "instructions": "填写说明",
+    "progress": "填写进度",
+    "progressLabel": "已完成必填题数",
+    "errors": "请检查以下答案",
+    "viewResult": "查看结果",
+    "references": "参考来源",
+    "invalid": "请完成此题并输入有效答案。",
+    "sameTime": "起床时间不能与上床时间相同，请检查。",
+    "sleepTooLong": "实际睡眠时长不能超过卧床时长，请检查时间。"
+  },
+  "notFound": {
+    "title": "页面未找到",
+    "description": "请求的页面不存在。",
+    "home": "返回首页"
+  }
+}
