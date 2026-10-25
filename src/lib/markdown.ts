@@ -192,9 +192,10 @@ export function resolveReference(
         (item) => item.file === file && item.metadata.status === 'published',
       )?.target;
     } else {
-      const route = withoutBasePath(
-        new URL(pathname, `https://content.invalid${document.target.route}`).pathname,
-      );
+      const route =
+        withoutBasePath(
+          new URL(pathname, `https://content.invalid${document.target.route}`).pathname,
+        ).replace(/^\/zh(?=\/|$)/, '') || '/';
       target = index.pages.find((page) => page.route === `${route.replace(/\/$/, '')}/`);
     }
   } else {
@@ -255,6 +256,7 @@ export function buildContentIndex(
   for (const locale of locales) {
     for (const [id, route, title] of [
       ['home', '/', messages[locale].site.title],
+      ['scales', '/scales/', messages[locale].site.scales],
       ['wiki', '/wiki/', messages[locale].content.wiki],
       ['blog', '/blog/', messages[locale].content.blog],
     ])
@@ -297,7 +299,7 @@ export function buildContentIndex(
     for (const scale of scales) {
       const file = contentPath('scales', `${scale.id}.yaml`);
       const source = scale.descriptionMarkdown?.[locale] ?? scale.description[locale];
-      for (const key of [`page:home:${locale}`, `scales:${scale.id}:${locale}`]) {
+      for (const key of [`page:scales:${locale}`, `scales:${scale.id}:${locale}`]) {
         const target = pages.find((page) => page.key === key)!;
         const tree = markdownParser().parse(source) as Root;
         if (tree.children.length !== 1 || tree.children[0].type !== 'paragraph')

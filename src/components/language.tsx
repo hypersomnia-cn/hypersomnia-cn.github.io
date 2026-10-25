@@ -42,9 +42,9 @@ export function useLanguage() {
   const router = useRouter();
   const translations = useContext(TranslationContext);
   const route = `${withoutBasePath(pathname).replace(/\/$/, '')}/`;
-  const alternate = translations[route];
+  const alternate = translations[route.replace(/^\/zh(?=\/|$)/, '') || '/'];
   const translationMissing = alternate === null;
-  const collection = route.match(/^\/(zh|en)\/(wiki|blog)\//)?.[2];
+  const collection = route.match(/^\/(?:(?:zh|en)\/)?(wiki|blog)\//)?.[1];
   const otherCollection = collection
     ? localizedPath(lang === 'zh' ? 'en' : 'zh', `/${collection}/`)
     : null;

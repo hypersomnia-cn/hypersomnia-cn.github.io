@@ -110,7 +110,7 @@ export function Assessment({
   const band = result ? scale.bands.find((b) => b.id === result.interpretationId)! : null;
   return (
     <main id="main" className="assessment-main">
-      <LocaleLink href="/" className="back-link">
+      <LocaleLink href="/scales/" className="back-link">
         {t('all')}
       </LocaleLink>
       <section className="assessment-heading">

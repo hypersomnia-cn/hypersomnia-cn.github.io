@@ -1,8 +1,8 @@
 {
   "site": {
-    "name": "成人嗜睡量表",
-    "title": "成人嗜睡量表",
-    "description": "包含 Epworth 嗜睡量表（ESS）、特发性睡眠增多严重程度量表（IHSS）、疲劳严重度量表（FSS）和匹兹堡睡眠质量指数（PSQI）。",
+    "name": "中枢嗜睡在线资料库",
+    "title": "中枢嗜睡在线资料库",
+    "description": "提供中枢嗜睡相关的自评量表、博客文章和 WIKI 资料。",
     "skip": "跳至内容",
     "switchLanguage": "Switch to English",
     "otherLanguage": "English",
@@ -13,7 +13,12 @@
     "recallPeriod": "评估时间范围：{value}",
     "sourceOrganization": "Hypersomnia Foundation",
     "relatedLinks": "相关链接",
-    "scaleTitle": "{name}（{abbreviation}）"
+    "scaleTitle": "{name}（{abbreviation}）",
+    "scales": "量表",
+    "scalesDescription": "包含 Epworth 嗜睡量表（ESS）、特发性睡眠增多严重程度量表（IHSS）、疲劳严重度量表（FSS）和匹兹堡睡眠质量指数（PSQI）。",
+    "blogDescription": "浏览已发布的博客文章。",
+    "wikiDescription": "按条目查阅中枢嗜睡相关资料及参考来源。",
+    "browse": "查看栏目"
   },
   "assessment": {
     "all": "全部量表",
@@ -45,7 +50,7 @@
     "authors": "作者",
     "references": "参考文献",
     "updated": "更新于",
-    "wiki": "知识库",
+    "wiki": "WIKI",
     "primaryReference": "主要参考来源",
     "published": "发布于",
     "empty": "暂无已发布内容。",

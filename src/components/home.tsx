@@ -3,7 +3,7 @@ import { useTranslations } from 'next-intl';
 import { LocaleLink, useLanguage } from './language';
 import type { ScaleSummary } from '@/lib/schema';
 import type { ReactNode } from 'react';
-export function Home({
+export function ScaleHome({
   scales,
   descriptions,
 }: {
@@ -15,10 +15,10 @@ export function Home({
   return (
     <main id="main" className="home-main">
       <section className="home-heading">
-        <h1>{t('title')}</h1>
-        <p>{t('description')}</p>
+        <h1>{t('scales')}</h1>
+        <p>{t('scalesDescription')}</p>
       </section>
-      <section id="scales" className="scale-section" aria-label={t('title')}>
+      <section id="scales" className="scale-section" aria-label={t('scales')}>
         <div className="scale-grid">
           {scales.map((s) => (
             <article className={`scale-card card-${s.id}`} key={s.id}>

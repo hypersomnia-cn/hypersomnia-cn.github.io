@@ -16,7 +16,7 @@ export default function NotFound() {
             <p>{messages.en.notFound.description}</p>
           </section>
           <nav className="result-actions" aria-label="首页 / Home">
-            <a href={publicPath('/zh/')} className="button button-primary">
+            <a href={publicPath('/')} className="button button-primary">
               {messages.zh.notFound.home}
             </a>
             <a href={publicPath('/en/')} className="button button-outline" lang="en">

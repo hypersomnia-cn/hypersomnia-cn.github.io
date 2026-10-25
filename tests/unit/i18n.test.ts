@@ -3,7 +3,16 @@ import { createTranslator } from 'next-intl';
 import { messages, isLocale } from '../../src/i18n/messages';
 import { readScale } from '../../src/lib/content';
 import { validateAnswers } from '../../src/lib/scoring';
+import { localizedPath, scaleFromPath } from '../../src/i18n/paths';
 describe('localization', () => {
+  it('uses Chinese at the root and recognizes both current and legacy scale routes', () => {
+    expect(localizedPath('zh')).toBe('/');
+    expect(localizedPath('zh', '/scales/')).toBe('/scales/');
+    expect(localizedPath('en', '/scales/')).toBe('/en/scales/');
+    for (const route of ['/scales/ess/', '/zh/scales/ess/', '/en/scales/ess/'])
+      expect(scaleFromPath(route)).toBe('ess');
+    expect(scaleFromPath('/scales/')).toBeNull();
+  });
   it('supports ICU item counts and translated scale titles', () => {
     const en = createTranslator({ locale: 'en', messages: messages.en, namespace: 'site' });
     const zh = createTranslator({ locale: 'zh', messages: messages.zh, namespace: 'site' });

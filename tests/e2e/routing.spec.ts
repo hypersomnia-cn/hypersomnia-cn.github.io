@@ -34,7 +34,7 @@ test('partial answers and errors survive locale navigation and browser history',
   page.on('request', (request) => {
     if (request.resourceType() === 'document') documents.push(request.url());
   });
-  await page.goto('./zh/scales/ess/');
+  await page.goto('./scales/ess/');
   await page.locator('#field-q1 input').first().check();
   await page.getByRole('button', { name: '查看结果' }).click();
   await expect(page.locator('#error-q2')).toBeVisible();
@@ -49,7 +49,7 @@ test('partial answers and errors survive locale navigation and browser history',
   await expect(page.locator('#field-q1 input').first()).toBeChecked();
   expect(documents).toHaveLength(1);
   await page.getByRole('link', { name: 'All questionnaires' }).click();
-  await expect(page).toHaveURL(/\/en\/$/);
+  await expect(page).toHaveURL(/\/en\/scales\/$/);
   await expect(page.locator('input:checked')).toHaveCount(0);
   await page.goBack();
   await expect(page.locator('input:checked')).toHaveCount(0);
@@ -63,7 +63,7 @@ test('PSQI free text remains in memory and never enters requests or storage', as
   const marker = 'private-draft-6f80c273';
   const requests: string[] = [];
   page.on('request', (request) => requests.push(`${request.url()} ${request.postData() ?? ''}`));
-  await page.goto('./zh/scales/psqi/');
+  await page.goto('./scales/psqi/');
   await page.locator('#field-q5j_text textarea').fill(marker);
   await page.locator('#field-q1 input').fill('23:45');
   await page.getByRole('button', { name: 'Switch to English' }).click();
@@ -95,7 +95,7 @@ test('fresh results survive locale changes but are cleared after leaving and ret
   await expect(page.getByTestId('score')).toHaveText('1.00');
   await expect(page.locator('.result-panel')).toBeFocused();
   await page.getByRole('link', { name: '全部量表' }).click();
-  await expect(page).toHaveURL(/\/zh\/$/);
+  await expect(page).toHaveURL(/\/scales\/$/);
   await page.goBack();
   await expect(page.getByTestId('score')).toHaveCount(0);
   await expect(page.locator('input:checked')).toHaveCount(0);
@@ -104,7 +104,7 @@ test('fresh results survive locale changes but are cleared after leaving and ret
 test('invalid and removed paths return actual 404 without query locale overrides', async ({
   page,
 }) => {
-  for (const route of ['./scales/ess/', './fr/', './en/scales/unknown/', './zh/missing/']) {
+  for (const route of ['./scales/unknown/', './fr/', './en/scales/unknown/', './scales/missing/']) {
     const response = await page.goto(route);
     expect(response?.status()).toBe(404);
     await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
@@ -121,7 +121,7 @@ test.describe('initial static HTML', () => {
   test('all ten pages have the correct locale and SEO without JavaScript', async ({ page }) => {
     for (const locale of ['zh', 'en'] as const) {
       for (const id of [null, 'ess', 'ihss', 'fss', 'psqi'] as const) {
-        const route = `/${locale}/${id ? `scales/${id}/` : ''}`;
+        const route = `${locale === 'zh' ? '/' : '/en/'}${id ? `scales/${id}/` : ''}`;
         const response = await page.goto(`.${route}`);
         expect(response?.status()).toBe(200);
         const scale = id ? readScale(id) : null;
@@ -153,10 +153,11 @@ test.describe('initial static HTML', () => {
   });
   test('root and static 404 provide working language links', async ({ page }) => {
     await page.goto('./');
-    await page.getByRole('link', { name: 'English', exact: true }).click();
-    await expect(page).toHaveURL(/\/en\/$/);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(messages.zh.site.title);
+    await page.getByRole('link', { name: '量表', exact: true }).last().click();
+    await expect(page).toHaveURL(/\/scales\/$/);
     expect((await page.goto('./does-not-exist/'))?.status()).toBe(404);
     await page.getByRole('link', { name: '返回首页' }).click();
-    await expect(page).toHaveURL(/\/zh\/$/);
+    await expect(page).toHaveURL(/\/$/);
   });
 });

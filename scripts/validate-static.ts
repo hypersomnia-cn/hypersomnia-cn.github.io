@@ -10,7 +10,7 @@ import { getContentIndex, contentPageMetadata } from '../src/lib/markdown';
 
 const contentIndex = getContentIndex();
 const validRoutes = new Set(contentIndex.pages.map((page) => page.route));
-for (const locale of locales) {
+for (const locale of ['', ...locales]) {
   for (const kind of ['wiki', 'blog'])
     assert(
       !fs.existsSync(path.resolve('out', locale, kind, '__empty__')),
@@ -183,15 +183,24 @@ for (const locale of locales) {
     checkLinks(html);
   }
 }
-assert(!fs.existsSync(path.join(root, 'scales')), 'Legacy scale routes must not be exported');
+for (const locale of locales) {
+  const route = localizedPath(locale, '/scales/');
+  const html = fs.readFileSync(path.join(root, route, 'index.html'), 'utf8');
+  assert.equal(
+    decode(html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1] ?? ''),
+    messages[locale].site.scales,
+  );
+  checkLinks(html);
+}
 for (const file of ['index.html', '404.html']) {
   const html = fs.readFileSync(path.join(root, file), 'utf8');
   checkLinks(html);
-  for (const locale of locales)
-    assert(
-      tags(html, 'a').some((tag) => tag.href === publicPath(`/${locale}/`)),
-      `${file}: missing locale link`,
-    );
+  if (file === '404.html')
+    for (const locale of locales)
+      assert(
+        tags(html, 'a').some((tag) => tag.href === publicPath(localizedPath(locale, '/'))),
+        `${file}: missing locale link`,
+      );
   if (file === '404.html')
     assert(
       tags(html, 'meta').some((tag) => tag.name === 'robots' && tag.content.includes('noindex')),

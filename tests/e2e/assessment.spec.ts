@@ -1,8 +1,28 @@
 import { test, expect } from '@playwright/test';
 import { readScaleIds } from '../../src/lib/content';
 
-test('home lists scales in editorial catalog order', async ({ page }) => {
+test('root opens in Chinese with three working collection links', async ({ page }) => {
+  await page.goto('./');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'zh-CN');
+  await expect(page).toHaveTitle('中枢嗜睡在线资料库');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('中枢嗜睡在线资料库');
+  await expect(page.locator('.collection-card')).toHaveCount(3);
+  for (const [name, route] of [
+    ['量表', 'scales'],
+    ['博客', 'blog'],
+    ['WIKI', 'wiki'],
+  ]) {
+    await page.goto('./');
+    await page.locator('.collection-grid').getByRole('link', { name, exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`/${route}/$`));
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(name);
+  }
   await page.goto('./zh/');
+  await expect(page.locator('.collection-card')).toHaveCount(3);
+});
+
+test('home lists scales in editorial catalog order', async ({ page }) => {
+  await page.goto('./scales/');
   const ids = await page
     .locator('.card-link')
     .evaluateAll((links) =>
@@ -19,7 +39,7 @@ test('ESS independent flow, missing answers, bilingual results, reset and privac
   page.on('request', (r) => {
     if (!['GET', 'HEAD'].includes(r.method())) writes.push(r.url());
   });
-  await page.goto('./zh/');
+  await page.goto('./scales/');
   await expect(page.locator('.scale-card')).toHaveCount(readScaleIds().length);
   await page.locator('.card-ess .card-link').click();
   await expect(page.getByRole('progressbar')).toHaveAttribute('value', '0');
@@ -60,7 +80,7 @@ test('ESS independent flow, missing answers, bilingual results, reset and privac
   await expect(page.locator('input:checked')).toHaveCount(0);
 });
 test('PSQI zeros and contradictory schedule', async ({ page }) => {
-  await page.goto('./zh/scales/psqi/');
+  await page.goto('./scales/psqi/');
   await page.locator('#field-q1 input').fill('23:00');
   await page.locator('#field-q2 input').fill('10');
   await page.locator('#field-q3 input').fill('23:00');
@@ -104,7 +124,7 @@ test('static routes and responsive layout', async ({ page }) => {
   );
 });
 test('keyboard can choose and submit ESS', async ({ page }) => {
-  await page.goto('./zh/scales/ess/');
+  await page.goto('./scales/ess/');
   for (const field of await page.locator('fieldset').all()) {
     await field.locator('input').first().focus();
     await page.keyboard.press('Space');
@@ -114,33 +134,31 @@ test('keyboard can choose and submit ESS', async ({ page }) => {
   await expect(page.getByTestId('score')).toHaveText('0');
 });
 test('FSS mean and IHSS maximum', async ({ page }) => {
-  await page.goto('./zh/scales/fss/');
+  await page.goto('./scales/fss/');
   for (const field of await page.locator('fieldset').all())
     await field.locator('input').first().check();
   await page.locator('fieldset').first().locator('input').nth(1).check();
   await page.getByRole('button', { name: '查看结果' }).click();
   await expect(page.getByTestId('score')).toHaveText('1.11');
-  await page.goto('./zh/scales/ihss/');
+  await page.goto('./scales/ihss/');
   for (const field of await page.locator('fieldset').all())
     await field.locator('input').last().check();
   await page.getByRole('button', { name: '查看结果' }).click();
   await expect(page.getByTestId('score')).toHaveText('50');
 });
 test('capture homepage and result for visual review', async ({ page }, testInfo) => {
-  await page.goto('./zh/');
+  await page.goto('./');
   await page.screenshot({ path: testInfo.outputPath('home.png'), fullPage: true });
-  await page.goto('./zh/scales/ess/');
+  await page.goto('./scales/ess/');
   for (const field of await page.locator('fieldset').all())
     await field.locator('input').first().check();
   await page.getByRole('button', { name: '查看结果' }).click();
   await page.screenshot({ path: testInfo.outputPath('result.png'), fullPage: true });
 });
 test('plain homepage and complete locale lifecycle', async ({ page }) => {
-  await page.goto('./en/');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    'Adult Sleepiness Questionnaires',
-  );
-  await expect(page).toHaveTitle('Adult Sleepiness Questionnaires');
+  await page.goto('./en/scales/');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Questionnaires');
+  await expect(page).toHaveTitle('Questionnaires | Central Hypersomnolence Online Library');
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   await expect(
     page.locator('.hero,.home-notes,.card-icon,.card-index,.scale-abbreviation'),
@@ -158,18 +176,16 @@ test('plain homepage and complete locale lifecycle', async ({ page }) => {
   await expect(page.locator('html')).toHaveAttribute('lang', 'zh-CN');
   await expect(page.locator('.assessment-meta')).toContainText('预估填写时间：');
   await expect(page.locator('.assessment-meta')).toContainText('评估时间范围：');
-  await expect(page).toHaveURL(/\/zh\/scales\/ess\//);
+  await expect(page).toHaveURL(/\/scales\/ess\//);
   await page.getByRole('link', { name: '全部量表' }).click();
   await expect(
     page.getByRole('heading', { name: '特发性睡眠增多严重程度量表（IHSS）' }),
   ).toBeVisible();
   await expect(page.locator('.site-footer')).toContainText('参考声明');
   await page.getByRole('button', { name: 'Switch to English' }).click();
-  await expect(page).toHaveURL(/\/en\/$/);
+  await expect(page).toHaveURL(/\/en\/scales\/$/);
   await page.reload();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    'Adult Sleepiness Questionnaires',
-  );
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Questionnaires');
   const response = await page.goto('./en/missing/');
   expect(response?.status()).toBe(404);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('页面未找到');

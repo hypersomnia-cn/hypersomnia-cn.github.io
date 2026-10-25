@@ -2,21 +2,21 @@ import { contentPath } from '../../src/lib/content-root';
 import { test, expect } from '@playwright/test';
 import fs from 'node:fs';
 
-const article = './zh/wiki/idiopathic-hypersomnia/';
+const article = './wiki/idiopathic-hypersomnia/';
 const referenceCount = [
   ...fs.readFileSync(contentPath('wiki', '特发性睡眠增多.md'), 'utf8').matchAll(/^\[\^[^\]]+\]:/gm),
 ].length;
 test('YAML Wiki references render on home and scale pages and create backlinks', async ({
   page,
 }) => {
-  await page.goto('./zh/');
+  await page.goto('./scales/');
   await page
     .locator('.card-ihss .card-description')
     .getByRole('link', { name: '特发性睡眠增多', exact: true })
     .click();
-  await expect(page).toHaveURL(/\/zh\/wiki\/idiopathic-hypersomnia\/$/);
-  await expect(page.locator('.content-backlinks a[href$="/zh/"]')).toHaveCount(1);
-  const scaleLink = page.locator('.content-backlinks a[href$="/zh/scales/ihss/"]');
+  await expect(page).toHaveURL(/\/wiki\/idiopathic-hypersomnia\/$/);
+  await expect(page.locator('.content-backlinks a[href$="/scales/"]')).toHaveCount(1);
+  const scaleLink = page.locator('.content-backlinks a[href$="/scales/ihss/"]');
   await expect(scaleLink).toHaveCount(1);
   await scaleLink.click();
   await expect(page.locator('meta[name=description]')).not.toHaveAttribute('content', /\[\[/);
@@ -24,15 +24,15 @@ test('YAML Wiki references render on home and scale pages and create backlinks',
     .locator('.scale-description')
     .getByRole('link', { name: '特发性睡眠增多', exact: true })
     .click();
-  await expect(page).toHaveURL(/\/zh\/wiki\/idiopathic-hypersomnia\/$/);
+  await expect(page).toHaveURL(/\/wiki\/idiopathic-hypersomnia\/$/);
 });
 test('wiki navigation, missing translation, sources and narrow-screen tables', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
-  await page.goto('./zh/');
-  await page.getByRole('link', { name: '知识库', exact: true }).click();
+  await page.goto('./scales/');
+  await page.getByRole('link', { name: 'WIKI', exact: true }).click();
   await page.getByRole('link', { name: '特发性睡眠增多（特发性嗜睡）', exact: true }).click();
-  await expect(page).toHaveURL(/\/zh\/wiki\/idiopathic-hypersomnia\/$/);
+  await expect(page).toHaveURL(/\/wiki\/idiopathic-hypersomnia\/$/);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('特发性睡眠增多（特发性嗜睡）');
   await expect(page.getByRole('button', { name: 'Switch to English' })).toBeDisabled();
   await expect(page.getByText('本文暂无英文版本', { exact: false })).toBeVisible();
@@ -72,8 +72,8 @@ test('unpublished and absent language routes remain actual 404s', async ({ page 
   for (const route of [
     './en/wiki/idiopathic-hypersomnia/',
     './en/wiki/__empty__/',
-    './zh/blog/__empty__/',
-    './zh/blog/missing/',
+    './blog/__empty__/',
+    './blog/missing/',
   ]) {
     expect((await page.goto(route))?.status()).toBe(404);
     await expect(page.locator('meta[name=robots]')).toHaveAttribute('content', /noindex/);
@@ -93,7 +93,7 @@ test.describe('Markdown without JavaScript', () => {
     await expect(page.locator('link[rel=alternate][hreflang=en]')).toHaveCount(0);
     await expect(page.locator('link[rel=canonical]')).toHaveAttribute(
       'href',
-      /\/zh\/wiki\/idiopathic-hypersomnia\/$/,
+      /\/wiki\/idiopathic-hypersomnia\/$/,
     );
     await page
       .getByRole('navigation', { name: '文章目录' })

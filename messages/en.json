@@ -1,8 +1,8 @@
 {
   "site": {
-    "name": "Adult Sleepiness Questionnaires",
-    "title": "Adult Sleepiness Questionnaires",
-    "description": "Includes the Epworth Sleepiness Scale (ESS), Idiopathic Hypersomnia Severity Scale (IHSS), Fatigue Severity Scale (FSS), and Pittsburgh Sleep Quality Index (PSQI).",
+    "name": "Central Hypersomnolence Online Library",
+    "title": "Central Hypersomnolence Online Library",
+    "description": "Self-assessment questionnaires, blog articles, and wiki resources on central hypersomnolence.",
     "skip": "Skip to content",
     "switchLanguage": "切换为中文",
     "otherLanguage": "简体中文",
@@ -13,7 +13,12 @@
     "recallPeriod": "Assessment period: {value}",
     "sourceOrganization": "Hypersomnia Foundation",
     "relatedLinks": "Related links",
-    "scaleTitle": "{name} ({abbreviation})"
+    "scaleTitle": "{name} ({abbreviation})",
+    "scales": "Questionnaires",
+    "scalesDescription": "Includes the Epworth Sleepiness Scale (ESS), Idiopathic Hypersomnia Severity Scale (IHSS), Fatigue Severity Scale (FSS), and Pittsburgh Sleep Quality Index (PSQI).",
+    "blogDescription": "Browse published blog articles.",
+    "wikiDescription": "Read articles and references on central hypersomnolence.",
+    "browse": "Browse collection"
   },
   "assessment": {
     "all": "All questionnaires",

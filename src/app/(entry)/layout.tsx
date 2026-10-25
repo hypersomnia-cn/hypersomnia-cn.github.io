@@ -1,8 +1,4 @@
-import '../globals.css';
+import LocalizedLayout from '../[locale]/layout';
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="zh-CN">
-      <body>{children}</body>
-    </html>
-  );
+  return LocalizedLayout({ children, params: Promise.resolve({ locale: 'zh' }) });
 }

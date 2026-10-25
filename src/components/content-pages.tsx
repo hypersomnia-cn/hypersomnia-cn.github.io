@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { messages } from '@/i18n/messages';
+import { localizedPath } from '@/i18n/paths';
 import type { Language } from '@/lib/schema';
 import type { ContentKind } from '@/lib/markdown-schema';
 import { contentDocuments, getContentIndex, type ContentDocument } from '@/lib/markdown';
@@ -70,7 +71,7 @@ export function ContentArticle({ document }: { document: ContentDocument }) {
   const headings = target.headings.filter(({ depth }) => depth === 2 || depth === 3);
   return (
     <main id="main" className="content-page">
-      <Link href={`/${target.locale}/${kind}/`} prefetch={false}>
+      <Link href={localizedPath(target.locale, `/${kind}/`)} prefetch={false}>
         {t[kind]}
       </Link>
       <article>

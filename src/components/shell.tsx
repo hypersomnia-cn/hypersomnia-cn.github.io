@@ -13,8 +13,9 @@ export function Header() {
         {t('name')}
       </LocaleLink>
       <nav className="header-nav" aria-label={lang === 'zh' ? '网站导航' : 'Site navigation'}>
-        <LocaleLink href="/wiki/">{content('wiki')}</LocaleLink>
+        <LocaleLink href="/scales/">{t('scales')}</LocaleLink>
         <LocaleLink href="/blog/">{content('blog')}</LocaleLink>
+        <LocaleLink href="/wiki/">{content('wiki')}</LocaleLink>
       </nav>
       <div className="language-control">
         <Button

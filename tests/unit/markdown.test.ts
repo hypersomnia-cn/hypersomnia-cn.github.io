@@ -56,13 +56,13 @@ describe('Markdown content engine', () => {
       },
     }));
     const index = buildContentIndex(root, scales);
-    const fragment = index.fragments.get('page:home:zh/ihss')!;
+    const fragment = index.fragments.get('page:scales:zh/ihss')!;
     const html = renderToStaticMarkup(renderDocument(fragment, true));
-    expect(html).toContain('/zh/wiki/alpha/');
+    expect(html).toContain('/wiki/alpha/');
     expect(html).toContain('相关症状</a>');
     expect(html).not.toContain('<p');
     expect(index.backlinks.get('wiki:alpha:zh')?.map((page) => page.key)).toEqual([
-      'page:home:zh',
+      'page:scales:zh',
       'scales:ihss:zh',
     ]);
     expect(plainMarkdown('用于评估[[特发性睡眠增多]]相关症状。')).toBe(
@@ -108,7 +108,7 @@ describe('Markdown content engine', () => {
     const index = fixtureIndex();
     const alpha = index.documents.find((item) => item.metadata.id === 'alpha')!;
     const html = renderToStaticMarkup(renderDocument(alpha));
-    expect(html).toContain('/zh/blog/beta/#heading-症状');
+    expect(html).toContain('/blog/beta/#heading-症状');
     expect(index.outgoing.get(alpha.target.key)?.size).toBe(2);
     expect(index.backlinks.get('blog:beta:zh')?.map((page) => page.identity)).toEqual([
       'wiki:alpha',
@@ -143,7 +143,7 @@ describe('Markdown content engine', () => {
     write('beta');
     const index = fixtureIndex();
     expect(index.backlinks.get('wiki:beta:zh')).toHaveLength(1);
-    expect(renderToStaticMarkup(renderDocument(index.documents[0]))).toContain('/zh/wiki/beta/');
+    expect(renderToStaticMarkup(renderDocument(index.documents[0]))).toContain('/wiki/beta/');
   });
 
   it('validates repeated headings and rejects an ambiguous title anchor', () => {

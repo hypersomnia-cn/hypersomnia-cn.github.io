@@ -7,7 +7,7 @@ import { contentKinds } from '../src/lib/markdown-schema';
 // Its notFound() output is a 404 document served as 200 by file-only hosts.
 // Remove only the reserved build placeholder so the host returns a real 404.
 const output = path.resolve('out');
-for (const locale of locales) {
+for (const locale of ['', ...locales]) {
   for (const kind of contentKinds) {
     const placeholder = path.resolve(output, locale, kind, '__empty__');
     if (!placeholder.startsWith(`${output}${path.sep}`)) throw new Error('Invalid export path');
