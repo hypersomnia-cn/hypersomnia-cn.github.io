@@ -3,7 +3,7 @@ import { readScales, readScaleSummaries } from '../../src/lib/content';
 it('projects only card data after validating the full content', () => {
   const full = readScales();
   const summary = readScaleSummaries();
-  expect(summary).toHaveLength(4);
+  expect(summary).toHaveLength(full.length);
   summary.forEach((s, i) => {
     expect(Object.keys(s).sort()).toEqual([
       'abbreviation',

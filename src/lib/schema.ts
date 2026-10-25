@@ -1,10 +1,11 @@
 import { z } from 'zod';
-import { psqiComponentIds, psqiFields, scaleContracts, scaleIds } from './scale-contracts';
+import { validatePsqiDefinition } from './psqi-contract';
+import { scaleIdPattern } from './scale-id';
 export const localized = z.object({ zh: z.string().trim().min(1), en: z.string().trim().min(1) });
 const option = z.object({
   id: z.string().min(1),
   label: localized,
-  score: z.number().int().min(0).max(7),
+  score: z.number().int(),
 });
 const question = z
   .object({
@@ -39,7 +40,8 @@ const question = z
   });
 export const scaleSchema = z
   .object({
-    id: z.enum(scaleIds),
+    schemaVersion: z.literal(1),
+    id: z.string().regex(scaleIdPattern),
     abbreviation: z.string().min(1),
     title: localized,
     itemCount: z.number().int().positive(),
@@ -84,56 +86,21 @@ export const scaleSchema = z
   .superRefine((s, ctx) => {
     const issue = (path: (string | number)[], message: string) =>
       ctx.addIssue({ code: 'custom', path, message });
-    const contract = scaleContracts[s.id];
-    if (s.calculator !== contract.calculator)
-      issue(['calculator'], 'Calculator does not match scale');
-    if (s.itemCount !== contract.itemCount) issue(['itemCount'], 'Item count does not match scale');
-    if (s.range[0] !== contract.range[0] || s.range[1] !== contract.range[1])
-      issue(['range'], 'Score range does not match scale');
-    if (
-      s.id === 'fss' &&
-      (s.totalRange?.[0] !== scaleContracts.fss.totalRange[0] ||
-        s.totalRange?.[1] !== scaleContracts.fss.totalRange[1])
-    )
-      issue(['totalRange'], 'FSS requires total range 9–63');
+    if (s.scoringVersion !== '1.0.0')
+      issue(['scoringVersion'], 'Unsupported scoring version; supported: 1.0.0');
+    if (s.calculator === 'mean' && !s.totalRange)
+      issue(['totalRange'], 'Mean calculators require the total range');
+    if (s.calculator === 'psqi') validatePsqiDefinition(s, issue);
     const ids = new Set<string>();
     s.sections.forEach((section, si) =>
       section.questions.forEach((q, qi) => {
         const at = ['sections', si, 'questions', qi];
         if (ids.has(q.id)) issue([...at, 'id'], `Duplicate question ID ${q.id}`);
         ids.add(q.id);
-        if (s.id === 'psqi') {
-          const partner = /^q10(?:[a-e]|e_text)?$/.test(q.id);
-          const expected =
-            psqiFields[q.id] ??
-            (partner
-              ? { type: q.id === 'q10e_text' ? 'text' : 'choice', required: false, scored: false }
-              : undefined);
-          if (!expected) issue([...at, 'id'], 'Unknown PSQI field');
-          else {
-            for (const [key, value] of Object.entries(expected)) {
-              if (q[key as keyof typeof q] !== value)
-                issue([...at, key], `PSQI ${q.id} requires ${key}=${value}`);
-            }
-            if (
-              expected.type === 'choice' &&
-              q.options
-                ?.map((o) => o.score)
-                .toSorted((a, b) => a - b)
-                .join(',') !== '0,1,2,3'
-            )
-              issue([...at, 'options'], 'PSQI choices must have scores 0,1,2,3');
-          }
-        } else if (q.scored) {
+        if (s.calculator !== 'psqi' && q.scored) {
           if (q.type !== 'choice')
             issue([...at, 'type'], 'Sum/mean calculators require choice questions');
           if (!q.required) issue([...at, 'required'], 'Scoring questions must be required');
-          if (
-            q.options?.some(
-              (o) => o.score < contract.optionRange[0] || o.score > contract.optionRange[1],
-            )
-          )
-            issue([...at, 'options'], 'Option score outside scale contract');
         }
       }),
     );
@@ -141,28 +108,17 @@ export const scaleSchema = z
       issue(['sections'], 'Duplicate section IDs');
     if (new Set(s.bands.map((x) => x.id)).size !== s.bands.length)
       issue(['bands'], 'Duplicate band IDs');
-    if (s.id === 'psqi') {
-      for (const id of Object.keys(psqiFields))
-        if (!ids.has(id)) issue(['sections'], `PSQI requires field ${id}`);
-      for (const id of psqiComponentIds)
-        if (!s.components?.[id]) issue(['components', id], 'Missing component label');
-    }
     let possible = new Set<number>();
-    if (s.id === 'psqi') {
-      possible = new Set(
-        Array.from(
-          { length: contract.range[1] - contract.range[0] + 1 },
-          (_, n) => n + contract.range[0],
-        ),
-      );
+    if (s.calculator === 'psqi') {
+      possible = new Set(Array.from({ length: 22 }, (_, n) => n));
     } else {
       const scored = s.sections.flatMap((x) => x.questions).filter((q) => q.scored);
-      if (scored.length !== contract.itemCount)
-        issue(['sections'], `${s.id} requires ${contract.itemCount} scored items`);
+      if (scored.length !== s.itemCount)
+        issue(['sections'], `${s.id} requires ${s.itemCount} scored items`);
       let totals = new Set([0]);
       for (const q of scored)
         totals = new Set([...totals].flatMap((sum) => (q.options ?? []).map((o) => sum + o.score)));
-      const divisor = contract.calculator === 'mean' ? scored.length : 1;
+      const divisor = s.calculator === 'mean' ? scored.length : 1;
       possible = new Set([...totals].map((n) => n / divisor));
       if (
         !totals.size ||

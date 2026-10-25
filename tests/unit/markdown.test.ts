@@ -1,3 +1,4 @@
+import { contentPath } from '../../src/lib/content-root';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -77,17 +78,19 @@ describe('Markdown content engine', () => {
     );
   });
   it('renders the real IH sample, merges references, and preserves every return link', () => {
-    const sample = fs.readFileSync(path.resolve('content/wiki/特发性睡眠增多.md'), 'utf8');
-    fs.mkdirSync(path.join(root, 'content/wiki'), { recursive: true });
-    fs.writeFileSync(path.join(root, 'content/wiki/ih.md'), sample);
-    const document = fixtureIndex().documents[0];
+    const sample = fs.readFileSync(contentPath('wiki', '特发性睡眠增多.md'), 'utf8');
+    fs.cpSync(contentPath('wiki'), path.join(root, 'content/wiki'), { recursive: true });
+    const document = fixtureIndex().documents.find(
+      (item) => item.metadata.id === 'idiopathic-hypersomnia',
+    )!;
     const html = renderToStaticMarkup(renderDocument(document));
     expect(document.target.headings.some((heading) => heading.title === '诊断')).toBe(true);
     expect(html).toContain('id="heading-诊断"');
     expect(html).toContain('<table>');
-    expect(html).toContain('并非逐句翻译');
     expect(html.match(/>参考文献<\/h2>/g)).toHaveLength(1);
-    expect(html.match(/id="source-fn-(?:wiki|trotti|critical|aasm|fda|cohort)"/g)).toHaveLength(6);
+    const references = [...sample.matchAll(/^\[\^([^\]]+)\]:/gm)].map((match) => match[1]);
+    expect(html.match(/id="source-fn-[^"]+"/g)).toHaveLength(references.length);
+    for (const reference of references) expect(html).toContain(`id="source-fn-${reference}"`);
     const calls = [...html.matchAll(/id="(source-fnref-[^"]+)"/g)].map((match) => match[1]);
     expect(calls.length).toBeGreaterThan(6);
     for (const call of calls) expect(html).toContain(`href="#${call}"`);

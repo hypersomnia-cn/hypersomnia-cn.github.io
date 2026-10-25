@@ -1,6 +1,6 @@
 import type { Answers, AssessmentResult, Scale } from './schema';
 import type { ValidationCode } from './scoring';
-import type { ScaleId } from './scale-contracts';
+import type { ScaleId } from './scale-id';
 export type AssessmentDraft = {
   scaleId: ScaleId;
   contentVersion: string;

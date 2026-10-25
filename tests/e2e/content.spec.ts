@@ -1,6 +1,11 @@
+import { contentPath } from '../../src/lib/content-root';
 import { test, expect } from '@playwright/test';
+import fs from 'node:fs';
 
 const article = './zh/wiki/idiopathic-hypersomnia/';
+const referenceCount = [
+  ...fs.readFileSync(contentPath('wiki', '特发性睡眠增多.md'), 'utf8').matchAll(/^\[\^[^\]]+\]:/gm),
+].length;
 test('YAML Wiki references render on home and scale pages and create backlinks', async ({
   page,
 }) => {
@@ -38,10 +43,10 @@ test('wiki navigation, missing translation, sources and narrow-screen tables', a
   await expect(page).toHaveURL(/#heading-/);
   await page.locator('[data-footnote-ref]').first().focus();
   await page.keyboard.press('Enter');
-  await expect(page).toHaveURL(/#source-fn-wiki$/);
-  await page.locator('#source-fn-wiki [data-footnote-backref]').first().click();
-  await expect(page).toHaveURL(/#source-fnref-wiki$/);
-  await expect(page.locator('[data-footnotes] li')).toHaveCount(6);
+  await expect(page).toHaveURL(/#source-fn-icsd$/);
+  await page.locator('#source-fn-icsd [data-footnote-backref]').first().click();
+  await expect(page).toHaveURL(/#source-fnref-icsd$/);
+  await expect(page.locator('[data-footnotes] li')).toHaveCount(referenceCount);
   await expect(page.locator('[data-footnotes] ol')).toHaveCSS('list-style-type', 'decimal');
   await expect(page.getByRole('heading', { name: '参考文献', exact: true })).toHaveCount(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
@@ -84,7 +89,7 @@ test.describe('Markdown without JavaScript', () => {
     await expect(page.locator('html')).toHaveAttribute('lang', 'zh-CN');
     await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
     await expect(page.locator('.markdown-table table')).toBeVisible();
-    await expect(page.locator('[data-footnotes] li')).toHaveCount(6);
+    await expect(page.locator('[data-footnotes] li')).toHaveCount(referenceCount);
     await expect(page.locator('link[rel=alternate][hreflang=en]')).toHaveCount(0);
     await expect(page.locator('link[rel=canonical]')).toHaveAttribute(
       'href',
@@ -92,13 +97,13 @@ test.describe('Markdown without JavaScript', () => {
     );
     await page
       .getByRole('navigation', { name: '文章目录' })
-      .getByRole('link', { name: '症状与表现' })
+      .getByRole('link', { name: '临床表现' })
       .click();
     await expect(page).toHaveURL(/#heading-/);
     await page.locator('[data-footnote-ref]').first().click();
-    await expect(page).toHaveURL(/#source-fn-wiki$/);
-    await page.locator('#source-fn-wiki [data-footnote-backref]').first().click();
-    await expect(page).toHaveURL(/#source-fnref-wiki$/);
+    await expect(page).toHaveURL(/#source-fn-icsd$/);
+    await page.locator('#source-fn-icsd [data-footnote-backref]').first().click();
+    await expect(page).toHaveURL(/#source-fnref-icsd$/);
     await expect(page.getByRole('button', { name: 'Switch to English' })).toBeDisabled();
   });
 });

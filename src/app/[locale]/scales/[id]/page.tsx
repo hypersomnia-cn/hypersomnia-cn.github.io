@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
-import { readScale } from '@/lib/content';
-import { scaleIds, isScaleId } from '@/lib/scale-contracts';
+import { readScale, readScaleIds, isScaleId } from '@/lib/content';
 import { isLocale } from '@/i18n/messages';
 import { pageMetadata } from '@/lib/site';
 import { Assessment } from '@/components/assessment';
@@ -8,7 +7,7 @@ import { getContentIndex } from '@/lib/markdown';
 import { renderDocument } from '@/lib/markdown-render';
 export const dynamicParams = false;
 export function generateStaticParams() {
-  return scaleIds.map((id) => ({ id }));
+  return readScaleIds().map((id) => ({ id }));
 }
 type Props = { params: Promise<{ locale: string; id: string }> };
 export async function generateMetadata({ params }: Props) {

@@ -1,4 +1,17 @@
 import { test, expect } from '@playwright/test';
+import { readScaleIds } from '../../src/lib/content';
+
+test('home lists scales in editorial catalog order', async ({ page }) => {
+  await page.goto('./zh/');
+  const ids = await page
+    .locator('.card-link')
+    .evaluateAll((links) =>
+      links.map((link) =>
+        new URL((link as HTMLAnchorElement).href).pathname.split('/').filter(Boolean).at(-1),
+      ),
+    );
+  expect(ids).toEqual(readScaleIds());
+});
 test('ESS independent flow, missing answers, bilingual results, reset and privacy', async ({
   page,
 }) => {
@@ -7,7 +20,7 @@ test('ESS independent flow, missing answers, bilingual results, reset and privac
     if (!['GET', 'HEAD'].includes(r.method())) writes.push(r.url());
   });
   await page.goto('./zh/');
-  await expect(page.locator('.scale-card')).toHaveCount(4);
+  await expect(page.locator('.scale-card')).toHaveCount(readScaleIds().length);
   await page.locator('.card-ess .card-link').click();
   await expect(page.getByRole('progressbar')).toHaveAttribute('value', '0');
   await page.getByRole('button', { name: '查看结果' }).click();

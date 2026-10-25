@@ -14,7 +14,8 @@ import {
   type ContentKind,
   type ContentMetadata,
 } from './markdown-schema';
-import { readScales, scaleIds } from './content';
+import { readScales, readScaleIds } from './content';
+import { contentPath, contentRoot } from './content-root';
 import type { Language } from './schema';
 import { locales, messages } from '../i18n/messages';
 import { localizedPath, withoutBasePath } from '../i18n/paths';
@@ -230,9 +231,13 @@ export function resolveReference(
   };
 }
 
-export function buildContentIndex(root = process.cwd(), scales = readScales()): ContentIndex {
+export function buildContentIndex(
+  root: string | undefined = undefined,
+  scales = readScales(),
+): ContentIndex {
+  const directory = root ? path.join(root, 'content') : contentRoot();
   const documents = contentKinds.flatMap((kind) =>
-    markdownFiles(path.join(root, 'content', kind)).map((file) => parseContent(kind, file)),
+    markdownFiles(path.join(directory, kind)).map((file) => parseContent(kind, file)),
   );
   const seenKeys = new Set<string>();
   const seenRoutes = new Set<string>();
@@ -290,7 +295,7 @@ export function buildContentIndex(root = process.cwd(), scales = readScales()): 
     index.translations.set(page.identity, [...(index.translations.get(page.identity) ?? []), page]);
   for (const locale of locales) {
     for (const scale of scales) {
-      const file = path.join(process.cwd(), 'content', 'scales', `${scale.id}.yaml`);
+      const file = contentPath('scales', `${scale.id}.yaml`);
       const source = scale.descriptionMarkdown?.[locale] ?? scale.description[locale];
       for (const key of [`page:home:${locale}`, `scales:${scale.id}:${locale}`]) {
         const target = pages.find((page) => page.key === key)!;
@@ -401,10 +406,12 @@ let cached: { signature: string; index: ContentIndex } | undefined;
 export function getContentIndex() {
   if (cached && process.env.NODE_ENV === 'production') return cached.index;
   const files = [
-    ...contentKinds.flatMap((kind) => markdownFiles(path.join(process.cwd(), 'content', kind))),
-    ...scaleIds.map((id) => path.join(process.cwd(), 'content', 'scales', `${id}.yaml`)),
+    ...contentKinds.flatMap((kind) => markdownFiles(contentPath(kind))),
+    contentPath('scales', 'index.yaml'),
+    ...readScaleIds().map((id) => contentPath('scales', `${id}.yaml`)),
   ];
-  const signature = files.map((file) => `${file}:${fs.readFileSync(file, 'utf8')}`).join('\0');
+  const signature =
+    contentRoot() + files.map((file) => `${file}:${fs.readFileSync(file, 'utf8')}`).join('\0');
   if (!cached || cached.signature !== signature) cached = { signature, index: buildContentIndex() };
   return cached.index;
 }

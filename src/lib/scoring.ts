@@ -23,7 +23,7 @@ export function validateAnswers(scale: Scale, answers: Answers): Record<string, 
         errors[q.id] = message;
     }
   }
-  if (scale.id === 'psqi' && !errors.q1 && !errors.q3 && answers.q1 && answers.q3) {
+  if (scale.calculator === 'psqi' && !errors.q1 && !errors.q3 && answers.q1 && answers.q3) {
     const hours = timeInBed(String(answers.q1), String(answers.q3));
     if (hours === 0) errors.q3 = 'sameTime';
     else if (!errors.q4 && Number(answers.q4) > hours) errors.q4 = 'sleepTooLong';
@@ -47,7 +47,7 @@ export function score(scale: Scale, answers: Answers): AssessmentResult {
     if (!q || q.type !== 'choice') throw new Error(`Invalid choice contract: ${id}`);
     const raw = answers[id];
     if (
-      scale.id === 'psqi' &&
+      scale.calculator === 'psqi' &&
       id === 'q5j' &&
       (raw == null || (typeof raw === 'string' && !raw.trim()))
     )

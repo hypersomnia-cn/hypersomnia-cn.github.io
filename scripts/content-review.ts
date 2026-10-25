@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import { readScales } from '../src/lib/content';
 const escape = (s: string) => s.replaceAll('|', '\\|').replaceAll('\n', ' ');
 let text =
-  '# 中英内容校对表\n\n由 YAML 自动生成。请修改 content/scales/*.yaml 后重新运行 pnpm review:content，不要只修改此文档。\n\n';
+  '# 中英内容校对表\n\n由 YAML 自动生成。请修改 内容仓库 scales/*.yaml 后重新运行 pnpm review:content，不要只修改此文档。\n\n';
 for (const s of readScales()) {
   text += `## ${s.abbreviation}\n\n来源版本：${s.sourceVersion}；内容 ${s.contentVersion}；计分 ${s.scoringVersion}。\n\n${s.sources.map((x) => `- [${x.title.zh}](${x.url})`).join('\n')}\n\n| ID | 中文 | English | 分值 |\n| --- | --- | --- | --- |\n`;
   for (const section of s.sections)

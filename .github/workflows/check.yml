@@ -16,8 +16,15 @@ jobs:
     env:
       NEXT_PUBLIC_BASE_PATH: ${{ matrix.base_path }}
       SITE_ORIGIN: https://example.test
+      IH_CONTENT_DIR: ${{ github.workspace }}/.local/content
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: hypersomnia-cn/hypersomnia-cn.github.io
+          ref: ${{ vars.CONTENT_REF || 'main' }}
+          path: .local/content
+          persist-credentials: false
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:

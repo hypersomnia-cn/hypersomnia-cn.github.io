@@ -4,7 +4,7 @@ import path from 'node:path';
 import { locales, localeTags, messages } from '../src/i18n/messages';
 import { basePath, localizedPath, publicPath } from '../src/i18n/paths';
 import { readScale, readScaleSummaries, readScales } from '../src/lib/content';
-import { scaleIds } from '../src/lib/scale-contracts';
+import { readScaleIds } from '../src/lib/content';
 import { absoluteUrl, pageMetadata } from '../src/lib/site';
 import { getContentIndex, contentPageMetadata } from '../src/lib/markdown';
 
@@ -48,7 +48,7 @@ function checkLinks(html: string) {
       continue;
     assert(url.startsWith(`${basePath}/_next/`), `Incorrect asset base path: ${url}`);
     assert(
-      fs.existsSync(path.join(root, url.slice(basePath.length).split('?')[0])),
+      fs.existsSync(path.join(root, decodeURIComponent(url.slice(basePath.length).split('?')[0]))),
       `Missing asset: ${url}`,
     );
   }
@@ -131,7 +131,7 @@ for (const target of contentIndex.pages.filter(
   checkLinks(html);
 }
 for (const locale of locales) {
-  for (const id of [null, ...scaleIds]) {
+  for (const id of [null, ...readScaleIds()]) {
     const route = localizedPath(locale, id ? `/scales/${id}/` : '/');
     const html = fs.readFileSync(path.join(root, route, 'index.html'), 'utf8');
     const scale = id ? readScale(id) : null;

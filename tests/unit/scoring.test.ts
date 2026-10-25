@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { readScale, readScales } from '../../src/lib/content';
+import { readScale, readScales, readScaleIds } from '../../src/lib/content';
 import { score, timeInBed, validateAnswers } from '../../src/lib/scoring';
 import { scaleSchema, type Answers, type Scale } from '../../src/lib/schema';
 function choices(s: Scale, highest = false): Answers {
@@ -15,7 +15,8 @@ function sleep(extra: Answers = {}): Answers {
   return { ...choices(psqi), q1: '23:00', q2: '10', q3: '07:00', q4: '8', ...extra };
 }
 describe('content and score contracts', () => {
-  it('validates all four datasets', () => expect(readScales()).toHaveLength(4));
+  it('validates all catalog datasets', () =>
+    expect(readScales()).toHaveLength(readScaleIds().length));
   for (const id of ['ess', 'ihss', 'fss']) {
     const s = readScale(id);
     it(`${id} minimum and maximum`, () => {

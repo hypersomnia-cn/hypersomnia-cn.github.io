@@ -1,13 +1,34 @@
 import fs from 'node:fs';
-import path from 'node:path';
+import { z } from 'zod';
+import { contentPath } from './content-root';
+import { scaleIdPattern } from './scale-id';
 import { parse } from 'yaml';
 import { scaleSchema, type Scale, type ScaleSummary } from './schema';
-import { scaleIds } from './scale-contracts';
 import { plainMarkdown } from './markdown-parser';
-export { scaleIds } from './scale-contracts';
+const catalogSchema = z
+  .object({
+    schemaVersion: z.literal(1),
+    scales: z.array(z.string().regex(scaleIdPattern)).min(1),
+  })
+  .strict()
+  .superRefine((catalog, ctx) => {
+    if (new Set(catalog.scales).size !== catalog.scales.length)
+      ctx.addIssue({ code: 'custom', path: ['scales'], message: 'Duplicate scale IDs in catalog' });
+  });
+export function readScaleIds(): string[] {
+  const file = contentPath('scales', 'index.yaml');
+  try {
+    return catalogSchema.parse(parse(fs.readFileSync(file, 'utf8'), { maxAliasCount: 50 })).scales;
+  } catch (error) {
+    throw new Error(`${file}: ${error instanceof Error ? error.message : String(error)}`);
+  }
+}
+export function isScaleId(id: string): boolean {
+  return readScaleIds().includes(id);
+}
 export function readScale(id: string): Scale {
-  if (!(scaleIds as readonly string[]).includes(id)) throw new Error(`Unknown scale: ${id}`);
-  const file = path.join(process.cwd(), 'content', 'scales', `${id}.yaml`);
+  if (!isScaleId(id)) throw new Error(`Unknown scale: ${id}`);
+  const file = contentPath('scales', `${id}.yaml`);
   let document: unknown;
   try {
     document = parse(fs.readFileSync(file, 'utf8'), { maxAliasCount: 50 });
@@ -30,7 +51,7 @@ export function readScale(id: string): Scale {
   };
 }
 export function readScales() {
-  return scaleIds.map(readScale);
+  return readScaleIds().map(readScale);
 }
 export function readScaleSummaries(): ScaleSummary[] {
   return readScales().map(
